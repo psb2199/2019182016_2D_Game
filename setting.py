@@ -1,4 +1,5 @@
 from pico2d import *
+import player
 
 open_canvas(400,600)
 
@@ -48,13 +49,13 @@ y = 50
 dir_x = 0
 dir_y = 0
 
-a_x = 0
-a_y = 0
+ammo_x = x
+ammo_y = y + 20
 
 while (running == True):
     clear_canvas()
     player.draw(x,y)
-    ammo.draw(a_x,a_y)
+    ammo.draw(ammo_x,ammo_y)
     update_canvas()
     handle_events()
 
@@ -71,13 +72,11 @@ while (running == True):
     elif (585 < y):
         y = 585
 
-
-
 #ammo logic
-    a_x = x
-    a_y = y
-    while (a_y < 100):
-        a_y += 1
+    ammo_y += 15
+    if(ammo_y > 600):
+        ammo_y = y + 20
+        ammo_x = x
 
     delay(0.01)
 
