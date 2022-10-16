@@ -4,6 +4,7 @@ open_canvas(400,600)
 
 player = load_image('player(50x50).png')
 enemy = load_image('enemy(50x50).png')
+ammo = load_image('ammo.png')
 
 def handle_events():
     global running
@@ -47,12 +48,17 @@ y = 50
 dir_x = 0
 dir_y = 0
 
+a_x = 0
+a_y = 0
+
 while (running == True):
     clear_canvas()
     player.draw(x,y)
+    ammo.draw(a_x,a_y)
     update_canvas()
     handle_events()
 
+#player logic
     x = x + (dir_x * 4)
     y = y + (dir_y * 4)
 
@@ -64,6 +70,14 @@ while (running == True):
         y = 15
     elif (585 < y):
         y = 585
+
+
+
+#ammo logic
+    a_x = x
+    a_y = y
+    while (a_y < 100):
+        a_y += 1
 
     delay(0.01)
 
