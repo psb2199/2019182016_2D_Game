@@ -8,6 +8,12 @@ enemy = load_image('enemy(50x50).png')
 player.draw_now(250,50)
 enemy.draw_now(250,650)
 
-delay(10)
+y = 0
+while (y<650):
+    clear_canvas_now()
+    player.draw_now(250,50)
+    enemy.draw_now(250,650-y)
+    y += 2
+    delay(0.01)
 
 close_canvas()
