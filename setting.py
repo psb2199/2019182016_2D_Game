@@ -52,9 +52,6 @@ x = 200
 y = 50
 dir_x = 0
 dir_y = 0
-ammo_x = x
-ammo_y = y + 20
-
 
 ammo0 = ammoclass.ammo(x,y)
 ammo1 = ammoclass.ammo(x,y)
@@ -68,10 +65,10 @@ ammoarray = [ammo0,ammo1,ammo2,ammo3,ammo4]
 player = playerclass.character(x,y)
 
 ammo0 = ammoclass.ammo(x,y)
-ammo1 = ammoclass.ammo(x,y)
-ammo2 = ammoclass.ammo(x,y)
-ammo3 = ammoclass.ammo(x,y)
-ammo4 = ammoclass.ammo(x,y)
+ammo1 = ammoclass.ammo(x,y+100)
+ammo2 = ammoclass.ammo(x,y+200)
+ammo3 = ammoclass.ammo(x,y+300)
+ammo4 = ammoclass.ammo(x,y+400)
 
 while (running == True):
     clear_canvas()
