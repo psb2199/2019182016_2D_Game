@@ -1,12 +1,9 @@
 from pico2d import *
 import playerclass
 import ammoclass
+import enemyclass
 
 open_canvas(400,600)
-
-
-#Player = load_image('player(50x50).png')
-enemy = load_image('enemy(50x50).png')
 
 def handle_events():
     global running
@@ -60,7 +57,10 @@ ammo4 = ammoclass.ammo(x,y)
 ammoarray = [ammo0,ammo1,ammo2,ammo3,ammo4]
 
 
-player = playerclass.character(x,y)
+Player = playerclass.character(x,y)
+Enemy1 = enemyclass.enemy(100)
+Enemy2 = enemyclass.enemy(300)
+Enemy3 = enemyclass.enemy(200)
 
 ammo0 = ammoclass.ammo(x,y)
 ammo1 = ammoclass.ammo(x,y+100)
@@ -70,7 +70,11 @@ ammo4 = ammoclass.ammo(x,y+400)
 
 while (running == True):
     clear_canvas()
-    player.draw()
+    Player.draw()
+
+    Enemy1.draw()
+    Enemy2.draw()
+    Enemy3.draw()
 
     ammo0.draw()
     ammo1.draw()
@@ -81,13 +85,16 @@ while (running == True):
     update_canvas()
     handle_events()
 
-    player.logic(dir_x,dir_y)
+    Player.logic(dir_x,dir_y)
+    Enemy1.logic()
+    Enemy2.logic()
+    Enemy3.logic()
 
-    ammo0.logic(player.x, player.y)
-    ammo1.logic(player.x, player.y)
-    ammo2.logic(player.x, player.y)
-    ammo3.logic(player.x, player.y)
-    ammo4.logic(player.x, player.y)
+    ammo0.logic(Player.x, Player.y)
+    ammo1.logic(Player.x, Player.y)
+    ammo2.logic(Player.x, Player.y)
+    ammo3.logic(Player.x, Player.y)
+    ammo4.logic(Player.x, Player.y)
 
     delay(0.01)
 
