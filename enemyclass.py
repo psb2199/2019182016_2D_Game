@@ -7,7 +7,7 @@ class enemy:
 
         self.x = x
         self.y = 650 + random.randrange(50, 200)
-        self.speed = random.randrange(0, 5)
+        self.speed = 1 + random.randrange(1, 5)/2
         self.image = load_image('enemy(50x50).png')
 
     def draw(self):
@@ -18,5 +18,5 @@ class enemy:
         if(self.y < -50):
             self.y = 650
             self.x = random.randrange(50, 350)
-            self.speed = random.randrange(0, 5)
+            self.speed = 1 + random.randrange(1, 5)/2
 

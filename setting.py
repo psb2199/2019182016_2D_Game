@@ -4,6 +4,7 @@ import ammoclass
 import enemyclass
 
 open_canvas(400,600)
+back = load_image('background.png')
 
 def handle_events():
     global running
@@ -47,6 +48,7 @@ x = 200
 y = 50
 dir_x = 0
 dir_y = 0
+frame = 0
 
 ammo0 = ammoclass.ammo(x,y)
 ammo1 = ammoclass.ammo(x,y)
@@ -70,6 +72,10 @@ ammo4 = ammoclass.ammo(x,y+400)
 
 while (running == True):
     clear_canvas()
+
+    back.clip_draw(0,0 + frame,400,600,200,300)
+    frame += 1
+
     Player.draw()
 
     Enemy1.draw()
