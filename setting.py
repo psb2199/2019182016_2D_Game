@@ -7,13 +7,11 @@ open_canvas(400,600)
 
 #Player = load_image('player(50x50).png')
 enemy = load_image('enemy(50x50).png')
-ammo = load_image('ammo.png')
 
 def handle_events():
     global running
     global dir_x
     global dir_y
-
 
     events = get_events()
     for event in events:
