@@ -73,8 +73,9 @@ ammo4 = ammoclass.ammo(x,y+400)
 while (running == True):
     clear_canvas()
 
-    back.clip_draw(0,0 + frame,400,600,200,300)
+    back.clip_draw(0,0 + frame%1800,400,600,200,300)
     frame += 1
+
 
     Player.draw()
 
