@@ -4,7 +4,7 @@ class ammo:
     def __init__(self,x,y):
         self.x = x
         self.y = y
-        self.image = load_image('ammo.png')
+        self.image = load_image('resources\\ammo.png')
 
     def draw(self):
         self.image.draw(self.x, self.y)

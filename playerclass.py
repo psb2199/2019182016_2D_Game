@@ -5,7 +5,7 @@ class character:
         self.x = x
         self.y = y
 
-        self.image = load_image('player(50x50).png')
+        self.image = load_image('resources\\player(50x50).png')
 
     def draw(self):
         self.image.draw(self.x, self.y)
