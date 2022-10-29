@@ -48,9 +48,10 @@ y = 50
 dir_x = 0
 dir_y = 0
 frame = 0
+aaaa = 0
 
-ammos = ammoclass.ammo(x,y)
-Ammoarray = (ammos for i in range(5))
+ammos = ammoclass.ammo()
+ammoarray = [ammos for i in range(0,100)]
 
 Player = playerclass.character(x,y)
 
@@ -60,34 +61,34 @@ Enemy2 = enemyclass.enemy(300)
 Enemy3 = enemyclass.enemy(200)
 
 
-
 while (running == True):
     clear_canvas()
 
     back.clip_draw(0,0 + frame%1800,400,600,200,300)
     frame += 1
 
+    Player.logic(dir_x, dir_y)
+
+    for amm in ammoarray:
+        amm.logic(Player.x, Player.y)
+
+    Enemy1.logic()
+    Enemy2.logic()
+    Enemy3.logic()
 
     Player.draw()
 
-    for ammos in Ammoarray:
-        ammos.draw()
-
+    for amm in ammoarray:
+        amm.draw()
 
     Enemy1.draw()
     Enemy2.draw()
     Enemy3.draw()
 
-
     update_canvas()
     handle_events()
 
-    Player.logic(dir_x,dir_y)
-    ammos.logic(Player.x, Player.y)
 
-    Enemy1.logic()
-    Enemy2.logic()
-    Enemy3.logic()
 
 
     delay(0.01)
