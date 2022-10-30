@@ -1,4 +1,7 @@
 from pico2d import *
+
+import time
+
 import playerclass
 import ammoclass
 import enemyclass
@@ -48,13 +51,14 @@ y = 50
 dir_x = 0
 dir_y = 0
 frame = 0
-aaaa = 0
 
-ammos = ammoclass.ammo()
-ammoarray = [ammos for i in range(0,100)]
+bullet_count = 18 # 총알 최대 18
+bullet_gap = 40 #총알 간격 40고정
+
+even_number = [aa for aa in range(0,bullet_count * bullet_gap) if aa%bullet_gap == 0]
 
 Player = playerclass.character(x,y)
-
+bullet_list = [ammoclass.ammo(x,y + even_number[i]) for i in range(0,bullet_count)]
 
 Enemy1 = enemyclass.enemy(100)
 Enemy2 = enemyclass.enemy(300)
@@ -67,23 +71,24 @@ while (running == True):
     back.clip_draw(0,0 + frame%1800,400,600,200,300)
     frame += 1
 
+    Player.draw()
     Player.logic(dir_x, dir_y)
 
-    for amm in ammoarray:
-        amm.logic(Player.x, Player.y)
+    for aa in bullet_list:
+        aa.draw()
+        aa.logic(Player.x, Player.y)
+
+
 
     Enemy1.logic()
     Enemy2.logic()
     Enemy3.logic()
 
-    Player.draw()
-
-    for amm in ammoarray:
-        amm.draw()
-
     Enemy1.draw()
     Enemy2.draw()
     Enemy3.draw()
+
+
 
     update_canvas()
     handle_events()
