@@ -52,6 +52,8 @@ dir_x = 0
 dir_y = 0
 frame = 0
 
+
+
 bullet_count = 18 # 총알 최대 18
 bullet_gap = 40 #총알 간격 40고정
 
@@ -61,8 +63,10 @@ Player = playerclass.character(x,y)
 bullet_list = [ammoclass.ammo(x,y + even_number[i]) for i in range(0,bullet_count)]
 
 Enemy1 = enemyclass.enemy(100)
-Enemy2 = enemyclass.enemy(300)
-Enemy3 = enemyclass.enemy(200)
+# Enemy2 = enemyclass.enemy(300)
+# Enemy3 = enemyclass.enemy(200)
+
+
 
 
 while (running == True):
@@ -80,13 +84,14 @@ while (running == True):
 
 
 
+
     Enemy1.logic()
-    Enemy2.logic()
-    Enemy3.logic()
+    # Enemy2.logic()
+    # Enemy3.logic()
 
     Enemy1.draw()
-    Enemy2.draw()
-    Enemy3.draw()
+    # Enemy2.draw()
+    # Enemy3.draw()
 
 
 

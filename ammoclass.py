@@ -1,5 +1,5 @@
 from pico2d import *
-import random
+import enemyclass
 
 class ammo:
     image = None
@@ -17,5 +17,7 @@ class ammo:
         if (self.y > player_y + 700):  # 700 = 화면 끝이나 적 피격시 사라질 값
             self.y = player_y + 20
             self.x = player_x
+        # if (enemyclass.enemy.size - self.y < 20 and enemyclass.enemy.size - self.x < 20):
+        #     print("dd")
 
 # 0qj
