@@ -94,7 +94,7 @@ def collide(a,b):
 def test_self():
     import play_state
 
-    pico2d.open_canvas()
+    pico2d.open_canvas(400, 600)
     game_framework.run(play_state)
     pico2d.clear_canvas()
 
