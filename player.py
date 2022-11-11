@@ -1,4 +1,5 @@
 from pico2d import *
+import game_framework
 import game_world
 from bullet import Bullet
 
@@ -202,4 +203,14 @@ class Player:
 
     # def handle_collision(self, other, group):
     #     print('boy meet ball')
+
+def test_self():
+    import play_state
+
+    pico2d.open_canvas(400, 600)
+    game_framework.run(play_state)
+    pico2d.clear_canvas()
+
+if __name__ == '__main__':
+    test_self()
 
