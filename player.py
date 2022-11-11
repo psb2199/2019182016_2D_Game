@@ -1,6 +1,8 @@
 from pico2d import *
 import game_framework
 import game_world
+import enemy
+
 from bullet import Bullet
 
 RD, LD, RU, LU, UD, DD, UU, DU = range(8)
@@ -51,7 +53,7 @@ class IDLE:
 
     @staticmethod
     def draw(self):
-        self.image.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
+        self.image.clip_composite_draw(96, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
 
 
 
@@ -79,14 +81,12 @@ class RUN:
 
     def exit(self, event):
         print('EXIT RUN')
-        self.face_dir = self.dir_y
-
 
 
     def do(self):
         self.frame = (self.frame + 1) % 1
-        self.x += self.dir_x
-        self.y += self.dir_y
+        self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
+        self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
         self.y = clamp(0, self.y, 600)
         self.timer += 1
@@ -94,12 +94,17 @@ class RUN:
             self.fire_ball()
 
     def draw(self):
-        self.image.clip_draw(self.frame*50, 0, 50, 50, self.x, self.y)
+        if self.dir_x == -1:
+            self.image.clip_composite_draw(0, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
+        elif self.dir_x == 1:
+            self.image.clip_composite_draw(192, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
+        else:
+            self.image.clip_composite_draw(64, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
 
 
 class RUNcross:
     def enter(self, event):
-        print('ENTER RUN')
+        print('ENTER RUNcross')
 
         if event == RD:
             self.dir_x += 1
@@ -120,14 +125,13 @@ class RUNcross:
             self.dir_y += 1
 
     def exit(self, event):
-        print('EXIT RUN')
-        self.face_dir = self.dir_y
+        print('EXIT RUNcross')
 
 
     def do(self):
-        self.frame = (self.frame + 1) % 1
-        self.x += self.dir_x
-        self.y += self.dir_y
+        self.frame = (self.frame + 1) % 4
+        self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
+        self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
         self.y = clamp(0, self.y, 600)
         self.timer += 1
@@ -135,7 +139,12 @@ class RUNcross:
             self.fire_ball()
 
     def draw(self):
-        self.image.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
+        if self.dir_x == -1:
+            self.image.clip_composite_draw(0, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
+        elif self.dir_x == 1:
+            self.image.clip_composite_draw(192, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
+        else:
+            self.image.clip_composite_draw(64, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
 
 
 
@@ -147,7 +156,15 @@ next_state = {
     RUNcross:  {RU: RUN, LU: RUN, RD: RUN, LD: RUN, UD: RUN, DD: RUN, UU: RUN, DU: RUN}
 }
 
+PIXEL_PER_METER = (10.0/0.3)
+RUN_SPEED_KMPH = 30.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0/60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAME_PER_ACTION = 8
 
 
 
@@ -158,7 +175,7 @@ class Player:
         self.frame = 0
         self.dir_x = 0
         self.dir_y = 0
-        self.image = load_image('resources\\player(50x50).png')
+        self.image = load_image('resources\\Player_T.png')
 
         self.timer = 0
         self.bullet_gap = 30
@@ -182,7 +199,7 @@ class Player:
 
 
     def draw(self):
-        self.image.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
+        self.cur_state.draw(self)
         draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
@@ -194,15 +211,16 @@ class Player:
             self.add_event(key_event)
 
     def fire_ball(self):
-        print('FIRE BALL')
-        bullet = Bullet(self.x, self.y, 3)
+        #print('FIRE BALL')
+        bullet = Bullet(self.x, self.y, 5)
         game_world.add_object(bullet, 0)
+        game_world.add_collision_group(enemy.Enemy(), bullet, 'enemy:bullet')
 
     def get_bb(self):
         return self.x - 15, self.y - 15, self.x + 15, self.y + 15
 
-    # def handle_collision(self, other, group):
-    #     print('boy meet ball')
+
+
 
 def test_self():
     import play_state

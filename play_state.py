@@ -4,12 +4,15 @@ import game_world
 
 from background import Background
 from player import Player
+from enemy import Enemy
+from bullet import Bullet
 
 
 player = None
 background = None
+enemy = None
 
-
+bullets = []
 
 def handle_events():
     events = get_events()
@@ -24,16 +27,22 @@ def handle_events():
 
 # 초기화
 def enter():
-    global player, background
+    global player, background, enemy
+
     player = Player()
     background = Background()
+    enemy = Enemy()
+
     game_world.add_object(background, 0)
     game_world.add_object(player, 1)
+    game_world.add_object(enemy, 1)
 
+    # global bullets
+    # bullets = [Bullet() for i in range(10)]
+    #
+    # game_world.add_objects(bullets, 1)
+    game_world.add_collision_group(enemy, bullets, 'enemy:bullet')
 
-    #충돌 그룹 정보 추가
-    # 소년과 볼들의 충돌 그룹 추가
-    #game_world.add_collision_group(boy, balls, 'boy:ball')
 
 
 
@@ -51,14 +60,6 @@ def update():
             print('COLLID by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-
-
-    #collide check
-    # for ball in balls.copy():
-    #     if collide(boy, ball):
-    #         print("COLLISION boy:ball")
-    #         balls.remove(ball)
-    #         game_world.remove_object(ball)
 
 
 
