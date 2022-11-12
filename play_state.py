@@ -3,16 +3,19 @@ import game_framework
 import game_world
 
 from background import Background
+from background import Background_cloud
+from background import Background_cloud2
 from player import Player
+from powerup import Powerup
 from enemy import Enemy
-from bullet import Bullet
 
 
 player = None
+powerup = None
+
 background = None
 enemy = None
 
-bullets = []
 
 def handle_events():
     events = get_events()
@@ -21,30 +24,36 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
+
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            game_world.add_object(powerup, 1)
+            game_world.add_collision_group(player, powerup, 'player:powerup')
+
         else:
             player.handle_event(event)
 
 
 # 초기화
 def enter():
-    global player, background, enemy
+    global player, background, enemy, cloud, cloud2, powerup
 
     player = Player()
+    powerup = Powerup()
     background = Background()
+    cloud = Background_cloud()
+    cloud2 = Background_cloud2()
     enemy = Enemy()
 
     game_world.add_object(background, 0)
+    game_world.add_object(cloud, 0)
+    game_world.add_object(cloud2, 0)
+
     game_world.add_object(player, 1)
+    # game_world.add_object(powerup, 1)
+
     game_world.add_object(enemy, 1)
 
-    # global bullets
-    # bullets = [Bullet() for i in range(10)]
-    #
-    # game_world.add_objects(bullets, 1)
-    game_world.add_collision_group(enemy, bullets, 'enemy:bullet')
-
-
-
+    # game_world.add_collision_group(player, powerup, 'player:powerup')
 
 # 종료
 def exit():

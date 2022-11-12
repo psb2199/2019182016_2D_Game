@@ -1,4 +1,6 @@
 from pico2d import *
+import game_world
+import random
 
 class Background:
     def __init__(self):
@@ -14,5 +16,40 @@ class Background:
     # def get_bb(self):
     #     return 0, 0, 1600 - 1, 50
 
+
+class Background_cloud:
+
+    def __init__(self,x = random.randint(0,400),y = 900):
+        self.image = load_image('resources\\cloud.png')
+        self.x = x
+        self.y = y
+
+    def update(self):
+        self.y -= random.randint(1,10)/5
+        if self.y < -300 or self.y > 900 :
+            self.y = 900
+            self.x = random.randint(-200,600)
+            print('clodd')
+
+    def draw(self):
+        self.image.clip_composite_draw(0, 0, 400, 400, 0, '', self.x, self.y, 600, 600)
+
+
+class Background_cloud2:
+
+    def __init__(self,x = random.randint(0,400),y = 900):
+        self.image = load_image('resources\\cloud2.png')
+        self.x = x
+        self.y = y
+
+    def update(self):
+        self.y -= random.randint(1,10)/10
+        if self.y < -300 or self.y > 900 :
+            self.y = 900.
+            self.x = random.randint(-200,600)
+            print('clodd')
+
+    def draw(self):
+        self.image.clip_composite_draw(0, 0, 400, 400, 0, '', self.x, self.y, 500, 500)
 
 

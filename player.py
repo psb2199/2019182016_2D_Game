@@ -1,12 +1,13 @@
 from pico2d import *
+
 import game_framework
 import game_world
-import enemy
 
 from bullet import Bullet
 
-RD, LD, RU, LU, UD, DD, UU, DU = range(8)
-event_name = ['RD', 'LD', 'RU', 'LU', 'UD', 'DD', 'UU', 'DU']
+
+RD, LD, RU, LU, UD, DD, UU, DU, SPACE = range(9)
+event_name = ['RD', 'LD', 'RU', 'LU', 'UD', 'DD', 'UU', 'DU', 'SPACE']
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
@@ -19,6 +20,7 @@ key_event_table = {
     (SDL_KEYUP, SDLK_UP): UU,
     (SDL_KEYUP, SDLK_DOWN): DU,
 
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE
 }
 
 
@@ -32,23 +34,19 @@ class IDLE:
         self.dir_y = 0
         self.timer = 0
 
+        if event == SPACE:
+            self.bullet_level += 1
+            print(self.bullet_level)
+
+
     @staticmethod
     def exit(self, event):
         print('EXIT IDLE')
         self.face_dir = self.dir_y
 
-        # if event == SPACE:
-        #     self.fire_ball()
-
-
     @staticmethod
     def do(self):
         self.frame = (self.frame + 1) % 1
-
-        self.timer += 1
-        if self.timer % self.bullet_gap == 1:
-            self.fire_ball()
-
 
 
     @staticmethod
@@ -65,7 +63,7 @@ class RUN:
             self.dir_x += 1
         elif event == LD:
             self.dir_x -= 1
-        if event == UD:
+        elif event == UD:
             self.dir_y += 1
         elif event == DD:
             self.dir_y -= 1
@@ -79,6 +77,10 @@ class RUN:
         elif event == DU:
             self.dir_y += 1
 
+        # elif event == SPACE:
+        #     self.bullet_level += 1
+        #     print('power up')
+
     def exit(self, event):
         print('EXIT RUN')
 
@@ -89,9 +91,7 @@ class RUN:
         self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
         self.y = clamp(0, self.y, 600)
-        self.timer += 1
-        if self.timer % self.bullet_gap == 1:
-            self.fire_ball()
+
 
     def draw(self):
         if self.dir_x == -1:
@@ -110,7 +110,7 @@ class RUNcross:
             self.dir_x += 1
         elif event == LD:
             self.dir_x -= 1
-        if event == UD:
+        elif event == UD:
             self.dir_y += 1
         elif event == DD:
             self.dir_y -= 1
@@ -124,6 +124,10 @@ class RUNcross:
         elif event == DU:
             self.dir_y += 1
 
+        # elif event == SPACE:
+        #     self.bullet_level += 1
+        #     print(self.bullet_level)
+
     def exit(self, event):
         print('EXIT RUNcross')
 
@@ -134,9 +138,7 @@ class RUNcross:
         self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
         self.y = clamp(0, self.y, 600)
-        self.timer += 1
-        if self.timer % self.bullet_gap == 1:
-            self.fire_ball()
+
 
     def draw(self):
         if self.dir_x == -1:
@@ -151,9 +153,9 @@ class RUNcross:
 
 
 next_state = {
-    IDLE:      {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN,  UD: RUN,  DD: RUN,  UU: RUN,  DU: RUN},
-    RUN:       {RU: IDLE, LU: IDLE, RD: RUNcross, LD: RUNcross, UD: RUNcross, DD: RUNcross, UU: IDLE, DU: IDLE},
-    RUNcross:  {RU: RUN, LU: RUN, RD: RUN, LD: RUN, UD: RUN, DD: RUN, UU: RUN, DU: RUN}
+    IDLE:      {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN,  UD: RUN,  DD: RUN,  UU: RUN,  DU: RUN, SPACE:IDLE},
+    RUN:       {RU: IDLE, LU: IDLE, RD: RUNcross, LD: RUNcross, UD: RUNcross, DD: RUNcross, UU: IDLE, DU: IDLE, SPACE:RUN},
+    RUNcross:  {RU: RUN, LU: RUN, RD: RUN, LD: RUN, UD: RUN, DD: RUN, UU: RUN, DU: RUN,SPACE:RUNcross}
 }
 
 PIXEL_PER_METER = (10.0/0.3)
@@ -179,6 +181,7 @@ class Player:
 
         self.timer = 0
         self.bullet_gap = 30
+        self.bullet_level = 1
 
         self.event_que = []
         self.cur_state = IDLE
@@ -186,6 +189,11 @@ class Player:
 
     def update(self):
         self.cur_state.do(self)
+
+        self.timer += 1
+        if self.timer % self.bullet_gap == 0:
+            self.fire_ball()
+            self.timer = 0
 
         if self.event_que:
             event = self.event_que.pop()
@@ -212,14 +220,20 @@ class Player:
 
     def fire_ball(self):
         #print('FIRE BALL')
-        bullet = Bullet(self.x, self.y, 5)
+        bullet = Bullet(self.x, self.y, 3, self.bullet_level)
         game_world.add_object(bullet, 0)
-        game_world.add_collision_group(enemy.Enemy(), bullet, 'enemy:bullet')
+
+        pass
 
     def get_bb(self):
-        return self.x - 15, self.y - 15, self.x + 15, self.y + 15
+        size_weath = 10
+        size_heigt = 10
+        return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
 
+    def handle_collision(self, other, group):
+        print('boy meet ball')
+        self.bullet_level += 1
 
 
 def test_self():
