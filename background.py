@@ -13,9 +13,6 @@ class Background:
     def draw(self):
         self.image.clip_draw(0, int(self.frame), 400, 600, 200, 300)
 
-    # def get_bb(self):
-    #     return 0, 0, 1600 - 1, 50
-
 
 class Background_cloud:
 
@@ -29,7 +26,6 @@ class Background_cloud:
         if self.y < -300 or self.y > 900 :
             self.y = 900
             self.x = random.randint(-200,600)
-            print('clodd')
 
     def draw(self):
         self.image.clip_composite_draw(0, 0, 400, 400, 0, '', self.x, self.y, 600, 600)
@@ -47,7 +43,6 @@ class Background_cloud2:
         if self.y < -300 or self.y > 900 :
             self.y = 900.
             self.x = random.randint(-200,600)
-            print('clodd')
 
     def draw(self):
         self.image.clip_composite_draw(0, 0, 400, 400, 0, '', self.x, self.y, 500, 500)

@@ -7,8 +7,6 @@ import game_world
 import random
 
 
-
-
 class Powerup:
     image = None
 

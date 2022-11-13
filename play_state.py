@@ -5,17 +5,26 @@ import game_world
 from background import Background
 from background import Background_cloud
 from background import Background_cloud2
+
 from player import Player
 from powerup import Powerup
+from bullet import Bullet
+
 from enemy import Enemy
 
 
+background = None
+cloud = None
+cloud2 = None
+
 player = None
 powerup = None
+bullet = None
+bullets = []
 
-background = None
 enemy = None
 
+ii = 0
 
 def handle_events():
     events = get_events()
@@ -28,40 +37,66 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             game_world.add_object(powerup, 1)
             game_world.add_collision_group(player, powerup, 'player:powerup')
-
         else:
             player.handle_event(event)
 
 
 # 초기화
 def enter():
-    global player, background, enemy, cloud, cloud2, powerup
+    global background, cloud, cloud2
+    global player, powerup
+    global bullets, bullet_count
+    global enemy
 
-    player = Player()
-    powerup = Powerup()
     background = Background()
     cloud = Background_cloud()
     cloud2 = Background_cloud2()
-    enemy = Enemy()
-
     game_world.add_object(background, 0)
     game_world.add_object(cloud, 0)
     game_world.add_object(cloud2, 0)
 
+
+    player = Player()
     game_world.add_object(player, 1)
-    # game_world.add_object(powerup, 1)
+    powerup = Powerup()
 
+
+    bullet_count = 5
+    bullet_gap = 20
+    bullets = [Bullet() for i in range(bullet_count)]
+    for i in range(bullet_count):
+        bullets[i].lifetime = -i * bullet_gap
+        game_world.add_object(bullets[i], 1)
+
+
+
+
+
+    enemy = Enemy()
     game_world.add_object(enemy, 1)
+    game_world.add_collision_group(bullets, enemy, 'bullets:enemy')
 
-    # game_world.add_collision_group(player, powerup, 'player:powerup')
+
+
+
 
 # 종료
 def exit():
     game_world.clear()
 
 def update():
+    global ii
     for game_object in game_world.all_objects():
         game_object.update()
+
+    if bullets[ii].lifetime == 0:
+        bullets[ii].x = player.x
+        bullets[ii].y = player.y
+        #bullets[ii].bullet_level = player.bullet_level
+        ii += 1
+    if ii + 1 > bullet_count:
+        ii = 0
+
 
 
     for a,b, group in game_world.all_collision_pairs():

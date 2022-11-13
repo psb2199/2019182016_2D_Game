@@ -1,17 +1,17 @@
-
 from pico2d import *
-
 import game_framework
-import game_world
-
-
+from player import Player
 
 class Bullet:
     image = None
 
-
-    def __init__(self, x = 200, y = 300, velocity = 1, bullet_level = 1):
+    def __init__(self, x = 200, y = 50, velocity = 3, bullet_level = 1):
         self.x, self.y, self.velocity, self.bullet_level = x, y, velocity, bullet_level
+        self.lifetime = 0
+
+        player = Player()
+        self.bullet_level = player.bullet_level
+
 
         if Bullet.image == None:
             Bullet.image = load_image('resources\\Bullet_1.png')
@@ -25,17 +25,21 @@ class Bullet:
             elif self.bullet_level % 4 == 0:
                 Bullet.image = load_image('resources\\Bullet_4.png')
 
-
     def draw(self):
-        self.image.draw(self.x, self.y)
+        if self.lifetime > 0:
+            self.image.draw(self.x, self.y)
+
         draw_rectangle(*self.get_bb())
 
-
     def update(self):
-        self.y += self.velocity
-        if self.y < 0 or self.y > 700 :
-            game_world.remove_object(self)
 
+        self.lifetime += 1
+        if self.lifetime > 0:
+            self.y += self.velocity
+
+        if self.lifetime > 200:
+            self.y = self.y
+            self.lifetime = 0
 
 
     def get_bb(self):
@@ -59,8 +63,10 @@ class Bullet:
 
     def handle_collision(self, other, group):
         print('bullet disappears')
-        if group == 'enemy:bullet':
-            game_world.remove_object(self)
+        if group == 'bullets:enemy':
+            self.x = 500
+            self.y = 0
+            pass
 
 
 

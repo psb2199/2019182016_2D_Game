@@ -1,9 +1,5 @@
 from pico2d import *
-
 import game_framework
-import game_world
-
-from bullet import Bullet
 
 
 RD, LD, RU, LU, UD, DD, UU, DU, SPACE = range(9)
@@ -29,19 +25,15 @@ key_event_table = {
 class IDLE:
     @staticmethod
     def enter(self,event):
-        print('ENTER IDLE')
+       # print('ENTER IDLE')
         self.dir_x = 0
         self.dir_y = 0
         self.timer = 0
 
-        if event == SPACE:
-            self.bullet_level += 1
-            print(self.bullet_level)
-
 
     @staticmethod
     def exit(self, event):
-        print('EXIT IDLE')
+        #print('EXIT IDLE')
         self.face_dir = self.dir_y
 
     @staticmethod
@@ -53,11 +45,9 @@ class IDLE:
     def draw(self):
         self.image.clip_composite_draw(96, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
 
-
-
 class RUN:
     def enter(self, event):
-        print('ENTER RUN')
+        #print('ENTER RUN')
 
         if event == RD:
             self.dir_x += 1
@@ -77,12 +67,9 @@ class RUN:
         elif event == DU:
             self.dir_y += 1
 
-        # elif event == SPACE:
-        #     self.bullet_level += 1
-        #     print('power up')
-
     def exit(self, event):
-        print('EXIT RUN')
+        #print('EXIT RUN')
+        pass
 
 
     def do(self):
@@ -101,10 +88,9 @@ class RUN:
         else:
             self.image.clip_composite_draw(64, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
 
-
 class RUNcross:
     def enter(self, event):
-        print('ENTER RUNcross')
+        #print('ENTER RUNcross')
 
         if event == RD:
             self.dir_x += 1
@@ -124,12 +110,9 @@ class RUNcross:
         elif event == DU:
             self.dir_y += 1
 
-        # elif event == SPACE:
-        #     self.bullet_level += 1
-        #     print(self.bullet_level)
-
     def exit(self, event):
-        print('EXIT RUNcross')
+        # print('EXIT RUNcross')
+        pass
 
 
     def do(self):
@@ -147,8 +130,6 @@ class RUNcross:
             self.image.clip_composite_draw(192, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
         else:
             self.image.clip_composite_draw(64, 0, 32, 32, 0, '', self.x, self.y, 50, 50)
-
-
 
 
 
@@ -190,11 +171,6 @@ class Player:
     def update(self):
         self.cur_state.do(self)
 
-        self.timer += 1
-        if self.timer % self.bullet_gap == 0:
-            self.fire_ball()
-            self.timer = 0
-
         if self.event_que:
             event = self.event_que.pop()
             self.cur_state.exit(self, event)
@@ -218,13 +194,6 @@ class Player:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
-    def fire_ball(self):
-        #print('FIRE BALL')
-        bullet = Bullet(self.x, self.y, 3, self.bullet_level)
-        game_world.add_object(bullet, 0)
-
-        pass
-
     def get_bb(self):
         size_weath = 10
         size_heigt = 10
@@ -232,8 +201,8 @@ class Player:
 
 
     def handle_collision(self, other, group):
-        print('boy meet ball')
         self.bullet_level += 1
+        pass
 
 
 def test_self():

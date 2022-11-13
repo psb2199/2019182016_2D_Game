@@ -30,6 +30,8 @@ class Enemy:
         if self.y < 0 or self.y > 900 :
             game_world.remove_object(self)
             print('dd')
+        if self.heath <= 0:
+            game_world.remove_object(self)
 
 
     def get_bb(self):
@@ -38,8 +40,9 @@ class Enemy:
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
-        if group == 'enemy:bullet':
-            game_world.remove_object(self)
+        if group == 'bullets:enemy':
+            self.heath -= 1
+            print(self.heath)
         pass
 
 
