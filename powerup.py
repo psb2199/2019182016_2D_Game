@@ -60,10 +60,6 @@ class Powerup:
 
 
 
-
-
-
-
 def test_self():
     import play_state
 

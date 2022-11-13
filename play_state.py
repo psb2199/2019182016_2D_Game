@@ -37,6 +37,8 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             game_world.add_object(powerup, 1)
             game_world.add_collision_group(player, powerup, 'player:powerup')
+            pass
+
         else:
             player.handle_event(event)
 
@@ -45,7 +47,7 @@ def handle_events():
 def enter():
     global background, cloud, cloud2
     global player, powerup
-    global bullets, bullet_count
+    global bullets, bullet_count,bullet_gap
     global enemy
 
     background = Background()
@@ -61,12 +63,13 @@ def enter():
     powerup = Powerup()
 
 
-    bullet_count = 5
+    bullet_count = 10
     bullet_gap = 20
     bullets = [Bullet() for i in range(bullet_count)]
     for i in range(bullet_count):
         bullets[i].lifetime = -i * bullet_gap
         game_world.add_object(bullets[i], 1)
+
 
 
 
@@ -92,16 +95,16 @@ def update():
     if bullets[ii].lifetime == 0:
         bullets[ii].x = player.x
         bullets[ii].y = player.y
-        #bullets[ii].bullet_level = player.bullet_level
+        bullets[ii].bullet_level = player.bullet_level
         ii += 1
     if ii + 1 > bullet_count:
         ii = 0
 
-
+    enemy.damage = player.attack_power
 
     for a,b, group in game_world.all_collision_pairs():
         if collide(a, b):
-            print('COLLID by ', group)
+            # print('COLLID by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
 

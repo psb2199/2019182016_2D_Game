@@ -3,18 +3,20 @@ import game_framework
 import game_world
 import math
 
+
 pi = 3.141592
 
 class Enemy:
     image = None
 
 
-    def __init__(self,x = 200,y=700):
+    def __init__(self,x = 200,y=700,damage = 1):
         if Enemy.image == None:
             Enemy.image = load_image('resources\\Monster_4.png')
-        self.x, self.y = x,y
-        self.heath = 100
+        self.x, self.y, self.damage = x,y,damage
+        self.heath = 1000
         self.frame = 0
+
 
 
     def draw(self):
@@ -22,6 +24,7 @@ class Enemy:
         draw_rectangle(*self.get_bb())
 
     def update(self):
+
 
         self.y = math.sin(self.frame / 200 ) * 20 + 500
         self.x = math.cos(self.frame / 200 ) * 100 + 200
@@ -40,10 +43,11 @@ class Enemy:
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
+
         if group == 'bullets:enemy':
-            self.heath -= 1
+            self.heath -= self.damage
             print(self.heath)
-        pass
+            pass
 
 
 

@@ -160,9 +160,8 @@ class Player:
         self.dir_y = 0
         self.image = load_image('resources\\Player_T.png')
 
-        self.timer = 0
-        self.bullet_gap = 30
         self.bullet_level = 1
+        self.attack_power = 1
 
         self.event_que = []
         self.cur_state = IDLE
@@ -201,7 +200,11 @@ class Player:
 
 
     def handle_collision(self, other, group):
-        self.bullet_level += 1
+
+        if group == 'player:powerup':
+            self.bullet_level += 1
+            self.attack_power += 1
+            #print(self.attack_power)
         pass
 
 
