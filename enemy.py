@@ -46,7 +46,7 @@ class Enemy:
 
         if group == 'bullets:enemy':
             self.heath -= self.damage
-            print(self.heath)
+            #print(self.heath)
             pass
 
 

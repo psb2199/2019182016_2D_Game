@@ -62,8 +62,11 @@ def enter():
     game_world.add_object(player, 1)
     powerup = Powerup()
 
+    enemy = Enemy()
+    game_world.add_object(enemy, 1)
 
-    bullet_count = 10
+
+    bullet_count = 1
     bullet_gap = 20
     bullets = [Bullet() for i in range(bullet_count)]
     for i in range(bullet_count):
@@ -71,13 +74,11 @@ def enter():
         game_world.add_object(bullets[i], 1)
 
 
-
-
-
-
-    enemy = Enemy()
-    game_world.add_object(enemy, 1)
     game_world.add_collision_group(bullets, enemy, 'bullets:enemy')
+
+
+
+
 
 
 

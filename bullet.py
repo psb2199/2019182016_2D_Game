@@ -8,9 +8,16 @@ class Bullet:
     image3 = None
     image4 = None
 
+    imageEF = None
+
     def __init__(self, x = 200, y = 50, velocity = 3, bullet_level = 1):
         self.x, self.y, self.velocity, self.bullet_level = x, y, velocity, bullet_level
         self.lifetime = 0
+
+        self.effect_x = 500
+        self.effect_y = 0
+        self.effect_lifetime = 0
+        self.eff_swt = False
 
         if Bullet.image1 == None:
             Bullet.image1 = load_image('resources\\Bullet_1.png')
@@ -21,6 +28,8 @@ class Bullet:
         if Bullet.image4 == None:
             Bullet.image4 = load_image('resources\\Bullet_4.png')
 
+        if Bullet.imageEF == None:
+            Bullet.imageEF = load_image('resources\\Effect.png')
 
     def draw(self):
         if self.lifetime > 0:
@@ -37,12 +46,31 @@ class Bullet:
                 self.image2.draw(self.x-15, self.y-10)
                 self.image2.draw(self.x+15, self.y-10)
 
+            if self.eff_swt == True:
+                self.imageEF.clip_composite_draw((self.effect_lifetime % 13) * 30, 0, 30, 27, 0, '', self.effect_x,
+                                                 self.effect_y, 30, 27)
+
+
+
         draw_rectangle(*self.get_bb())
+
 
     def update(self):
         #print(self.attack_power)
 
         self.lifetime += 1
+        if self.eff_swt == True:
+            self.effect_lifetime += 1
+            if self.effect_lifetime > 13:
+                self.effect_lifetime = 14
+                self.eff_swt = False
+        print(self.effect_lifetime)
+
+
+        if self.effect_lifetime > 12:
+            self.effect_lifetime = 0
+
+
         if self.lifetime > 0:
             self.y += self.velocity
 
@@ -76,9 +104,17 @@ class Bullet:
     def handle_collision(self, other, group):
         # print('bullet disappears')
         if group == 'bullets:enemy':
+            self.effect_x = self.x
+            self.effect_y = self.y
+            self.eff_swt = True
+            # self.imageEF.clip_composite_draw((self.lifetime % 12) * 30, 0, 30, 27, 0, '', self.effect_x, self.effect_y-100, 30, 27)
+
             self.x = 500
             self.y = 0
-            pass
+        else:
+            self.eff_swt = False
+
+        pass
 
 
 
