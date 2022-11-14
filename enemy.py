@@ -4,8 +4,6 @@ import game_world
 import math
 
 
-pi = 3.141592
-
 class Enemy:
     image = None
 
@@ -27,7 +25,7 @@ class Enemy:
 
 
         self.y = math.sin(self.frame / 200 ) * 20 + 500
-        self.x = math.cos(self.frame / 200 ) * 100 + 200
+        self.x = math.cos(self.frame / 400 ) * 100 + 200
 
         self.frame += 1
         if self.y < 0 or self.y > 900 :
@@ -39,7 +37,7 @@ class Enemy:
 
     def get_bb(self):
         size_weath = 100
-        size_heigt = 20
+        size_heigt = 10
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):

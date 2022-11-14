@@ -11,6 +11,7 @@ from powerup import Powerup
 from bullet import Bullet
 
 from enemy import Enemy
+from enemy_bullet import Enemy_Bullet
 
 
 background = None
@@ -19,10 +20,10 @@ cloud2 = None
 
 player = None
 powerup = None
-bullet = None
 bullets = []
 
 enemy = None
+enemy_bullet = []
 
 ii = 0
 
@@ -46,9 +47,12 @@ def handle_events():
 # 초기화
 def enter():
     global background, cloud, cloud2
+
     global player, powerup
     global bullets, bullet_count,bullet_gap
+
     global enemy
+    global enemy_bullets
 
     background = Background()
     cloud = Background_cloud()
@@ -57,30 +61,31 @@ def enter():
     game_world.add_object(cloud, 0)
     game_world.add_object(cloud2, 0)
 
+    enemy = Enemy()
+    game_world.add_object(enemy, 1)
+
+    enemy_bullets = [Enemy_Bullet() for i in range(0,4)]
+    for i in range(0,4):
+        enemy_bullets[i].lifetime = -i * 20
+        game_world.add_object(enemy_bullets[i], 1)
+
 
     player = Player()
     game_world.add_object(player, 1)
     powerup = Powerup()
 
-    enemy = Enemy()
-    game_world.add_object(enemy, 1)
-
-
-    bullet_count = 1
-    bullet_gap = 20
+    bullet_count = 10  # 10개 권장
+    bullet_gap = 20  # 20 권장
     bullets = [Bullet() for i in range(bullet_count)]
     for i in range(bullet_count):
         bullets[i].lifetime = -i * bullet_gap
         game_world.add_object(bullets[i], 1)
 
 
+
+
+
     game_world.add_collision_group(bullets, enemy, 'bullets:enemy')
-
-
-
-
-
-
 
 
 

@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import random
 
 
 class Bullet:
@@ -32,7 +33,9 @@ class Bullet:
             Bullet.imageEF = load_image('resources\\Effect.png')
 
     def draw(self):
+
         if self.lifetime > 0:
+
             if self.bullet_level == 1:
                 self.image1.draw(self.x, self.y)
             elif self.bullet_level == 2:
@@ -47,10 +50,8 @@ class Bullet:
                 self.image2.draw(self.x+15, self.y-10)
 
             if self.eff_swt == True:
-                self.imageEF.clip_composite_draw((self.effect_lifetime % 13) * 30, 0, 30, 27, 0, '', self.effect_x,
-                                                 self.effect_y, 30, 27)
-
-
+                self.imageEF.clip_composite_draw((int(self.effect_lifetime) % 13) * 30, 0, 30, 27, 0, '',
+                                                 self.effect_x, self.effect_y, 30, 27)
 
         draw_rectangle(*self.get_bb())
 
@@ -59,17 +60,12 @@ class Bullet:
         #print(self.attack_power)
 
         self.lifetime += 1
+
         if self.eff_swt == True:
-            self.effect_lifetime += 1
+            self.effect_lifetime += 0.15
             if self.effect_lifetime > 13:
-                self.effect_lifetime = 14
                 self.eff_swt = False
-        print(self.effect_lifetime)
-
-
-        if self.effect_lifetime > 12:
-            self.effect_lifetime = 0
-
+                self.effect_lifetime = 0
 
         if self.lifetime > 0:
             self.y += self.velocity
@@ -104,10 +100,9 @@ class Bullet:
     def handle_collision(self, other, group):
         # print('bullet disappears')
         if group == 'bullets:enemy':
-            self.effect_x = self.x
-            self.effect_y = self.y
+            self.effect_x = self.x + random.randint(-10,10)
+            self.effect_y = self.y + random.randint(-10,10)
             self.eff_swt = True
-            # self.imageEF.clip_composite_draw((self.lifetime % 12) * 30, 0, 30, 27, 0, '', self.effect_x, self.effect_y-100, 30, 27)
 
             self.x = 500
             self.y = 0

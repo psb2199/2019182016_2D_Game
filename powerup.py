@@ -43,8 +43,8 @@ class Powerup:
 
 
     def get_bb(self):
-        size_weath = 13
-        size_heigt = 9
+        size_weath = 15
+        size_heigt = 12
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
 

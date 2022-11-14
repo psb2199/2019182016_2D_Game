@@ -194,8 +194,8 @@ class Player:
             self.add_event(key_event)
 
     def get_bb(self):
-        size_weath = 10
-        size_heigt = 10
+        size_weath = 7
+        size_heigt = 7
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
 
