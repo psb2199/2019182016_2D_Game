@@ -1,6 +1,5 @@
 from pico2d import *
 import game_framework
-import game_world
 import random
 
 
@@ -8,10 +7,10 @@ class Enemy_Bullet:
     image = None
 
 
-    def __init__(self,x = 200,y=700,velocity = 0.5):
+    def __init__(self,x = 600,y=700,velocity_y = 0.5,velocity_x = random.randint(-20,20)):
         if Enemy_Bullet.image == None:
             Enemy_Bullet.image = load_image('resources\\Enemy_Bullet.png')
-        self.x, self.y, self.velocity = x,y,velocity
+        self.x, self.y, self.velocity_y,self.velocity_x = x,y,velocity_y,velocity_x
         self.lifetime = 0
         self.frame = 0
 
@@ -27,12 +26,14 @@ class Enemy_Bullet:
         self.lifetime += 1
 
         if self.lifetime > 0:
-            self.y -= self.velocity
+            self.y -= self.velocity_y
+            self.x += self.velocity_x
             self.frame += 1
 
-        if self.y < 0 or self.y > 900 :
-            game_world.remove_object(self)
-            print('dd')
+        if self.lifetime > 1200:
+            self.y = self.y
+            self.velocity_x = random.randint(-20, 20)/150
+            self.lifetime = 0
 
 
 

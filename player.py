@@ -38,7 +38,7 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 1
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 1
 
 
     @staticmethod
@@ -73,7 +73,7 @@ class RUN:
 
 
     def do(self):
-        self.frame = (self.frame + 1) % 1
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 1
         self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
@@ -116,7 +116,7 @@ class RUNcross:
 
 
     def do(self):
-        self.frame = (self.frame + 1) % 4
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         self.x += self.dir_x * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 400)
@@ -158,7 +158,7 @@ class Player:
         self.frame = 0
         self.dir_x = 0
         self.dir_y = 0
-        self.image = load_image('resources\\Player_T.png')
+        self.image = load_image('resources\\Player.png')
 
         self.bullet_level = 1
         self.attack_power = 1
@@ -204,7 +204,8 @@ class Player:
         if group == 'player:powerup':
             self.bullet_level += 1
             self.attack_power += 1
-            #print(self.attack_power)
+        if group == 'enemy_bullets:player':
+            print("gameover")
         pass
 
 

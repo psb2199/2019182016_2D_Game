@@ -10,7 +10,7 @@ from player import Player
 from powerup import Powerup
 from bullet import Bullet
 
-from enemy import Enemy
+from mid_boss import Mid_Boss
 from enemy_bullet import Enemy_Bullet
 
 
@@ -22,10 +22,12 @@ player = None
 powerup = None
 bullets = []
 
-enemy = None
+mid_boss = None
 enemy_bullet = []
 
+gametime = 0
 ii = 0
+ee = 0
 
 def handle_events():
     events = get_events()
@@ -46,13 +48,14 @@ def handle_events():
 
 # 초기화
 def enter():
+    # global gametime
     global background, cloud, cloud2
 
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
-    global enemy
-    global enemy_bullets
+    global mid_boss
+    global enemy_bullets, em_bulcnt, em_bulgap
 
     background = Background()
     cloud = Background_cloud()
@@ -61,13 +64,17 @@ def enter():
     game_world.add_object(cloud, 0)
     game_world.add_object(cloud2, 0)
 
-    enemy = Enemy()
-    game_world.add_object(enemy, 1)
 
-    enemy_bullets = [Enemy_Bullet() for i in range(0,4)]
-    for i in range(0,4):
-        enemy_bullets[i].lifetime = -i * 20
-        game_world.add_object(enemy_bullets[i], 1)
+
+    mid_boss = Mid_Boss()
+    game_world.add_object(mid_boss, 1)
+
+    em_bulcnt = 20
+    em_bulgap = 50
+    enemy_bullets = [Enemy_Bullet() for i in range(em_bulcnt)]
+    for i in range(em_bulcnt):
+        enemy_bullets[i].lifetime = -i * em_bulgap
+        game_world.add_object(enemy_bullets[i], 0)
 
 
     player = Player()
@@ -85,7 +92,8 @@ def enter():
 
 
 
-    game_world.add_collision_group(bullets, enemy, 'bullets:enemy')
+    game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
+    game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
 
 
 
@@ -94,7 +102,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global ii
+    global ii,ee,gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -106,13 +114,28 @@ def update():
     if ii + 1 > bullet_count:
         ii = 0
 
-    enemy.damage = player.attack_power
+    if mid_boss.heath > 0:
+        if enemy_bullets[ee].lifetime == 0:
+            if ee % 2 ==0:
+                enemy_bullets[ee].x = mid_boss.x - 30
+            elif ee % 2 == 1:
+                enemy_bullets[ee].x = mid_boss.x + 30
+            enemy_bullets[ee].y = mid_boss.y - 10
+            ee += 1
+        if ee + 1 > em_bulcnt:
+            ee = 0
+
+    mid_boss.damage = player.attack_power
+
 
     for a,b, group in game_world.all_collision_pairs():
         if collide(a, b):
             # print('COLLID by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+
+    gametime += 1
+
 
 
 

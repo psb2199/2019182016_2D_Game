@@ -4,7 +4,7 @@ import random
 
 class Background:
     def __init__(self):
-        self.image = load_image('resources\\Map_2.png')
+        self.image = load_image('resources\\Map.png')
         self.frame = 0
 
     def update(self):

@@ -3,6 +3,16 @@ import game_framework
 import random
 
 
+PIXEL_PER_METER = (10.0/0.3)
+RUN_SPEED_KMPH = 0.45
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0/60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAME_PER_ACTION = 8
+
 class Bullet:
     image1 = None
     image2 = None
@@ -11,9 +21,10 @@ class Bullet:
 
     imageEF = None
 
-    def __init__(self, x = 200, y = 50, velocity = 3, bullet_level = 1):
+    def __init__(self, x = 200, y = 50, velocity = RUN_SPEED_PPS, bullet_level = 1):
         self.x, self.y, self.velocity, self.bullet_level = x, y, velocity, bullet_level
         self.lifetime = 0
+        self.frame = 0
 
         self.effect_x = 500
         self.effect_y = 0
@@ -99,7 +110,7 @@ class Bullet:
 
     def handle_collision(self, other, group):
         # print('bullet disappears')
-        if group == 'bullets:enemy':
+        if group == 'bullets:mid_boss':
             self.effect_x = self.x + random.randint(-10,10)
             self.effect_y = self.y + random.randint(-10,10)
             self.eff_swt = True
@@ -110,6 +121,7 @@ class Bullet:
             self.eff_swt = False
 
         pass
+
 
 
 
