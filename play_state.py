@@ -24,7 +24,7 @@ player = None
 powerup = None
 bullets = []
 
-small_enemy = None
+small_enemys = []
 
 mid_boss = None
 enemy_bullet = []
@@ -58,7 +58,7 @@ def enter():
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
-    global small_enemy
+    global small_enemys
 
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
@@ -81,8 +81,16 @@ def enter():
         enemy_bullets[i].lifetime = -i * em_bulgap
         game_world.add_object(enemy_bullets[i], 0)
 
-    small_enemy = Small_Enemy()
-    game_world.add_object(small_enemy, 1)
+
+
+    small_em_cnt = 5
+    small_em_gap = 100
+    small_enemys = [Small_Enemy() for i in range(small_em_cnt)]
+    for i in range(small_em_cnt):
+        small_enemys[i].liftime = -i * small_em_gap
+        game_world.add_object(small_enemys[i], 1)
+
+
 
     player = Player()
     game_world.add_object(player, 1)
@@ -96,7 +104,7 @@ def enter():
         game_world.add_object(bullets[i], 1)
 
 
-    game_world.add_collision_group(bullets, small_enemy, 'bullets:small_enemy')
+    game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
     game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
     game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
 
@@ -129,6 +137,7 @@ def update():
             ee += 1
         if ee + 1 > em_bulcnt:
             ee = 0
+
 
     mid_boss.damage = player.attack_power
 

@@ -21,7 +21,7 @@ class Bullet:
 
     imageEF = None
 
-    def __init__(self, x = 200, y = 50, velocity = RUN_SPEED_PPS, bullet_level = 1):
+    def __init__(self, x = 200, y = 700, velocity = RUN_SPEED_PPS, bullet_level = 1):
         self.x, self.y, self.velocity, self.bullet_level = x, y, velocity, bullet_level
         self.lifetime = 0
         self.frame = 0
@@ -64,7 +64,7 @@ class Bullet:
                 self.imageEF.clip_composite_draw((int(self.effect_lifetime) % 13) * 30, 0, 30, 27, 0, '',
                                                  self.effect_x, self.effect_y, 30, 27)
 
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
 
     def update(self):
@@ -118,9 +118,9 @@ class Bullet:
             self.x = 500
             self.y = 0
 
-        elif group == 'bullets:small_enemy':
+        elif group == 'bullets:small_enemys':
             self.effect_x = self.x
-            self.effect_y = self.y 
+            self.effect_y = self.y
             self.eff_swt = True
 
             self.x = 500

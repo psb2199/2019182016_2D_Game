@@ -9,12 +9,12 @@ class Small_Enemy:
     image = None
 
 
-    def __init__(self,x = 100,y=700,damage = 1):
+    def __init__(self,x = 0,y=0,damage = 1):
         if Small_Enemy.image == None:
             Small_Enemy.image = load_image('resources\\enemy1.png')
 
         self.x, self.y, self.damage = x,y,damage
-        self.heath = 1
+        self.heath = 10
         self.liftime = 0
 
         self.frame = 0
@@ -25,20 +25,20 @@ class Small_Enemy:
 
     def draw(self):
         if self.heath > 0:
-            self.image.clip_composite_draw((int(self.frame/10) % 11)*32, 0, 32, 36, 0, '', self.x, self.y, 32, 36)
-        draw_rectangle(*self.get_bb())
+            self.image.clip_composite_draw((int(self.frame/10) % 11)*32, 0, 32, 36, 0.7, '', self.x, self.y, 32, 36)
+        # draw_rectangle(*self.get_bb())
 
     def update(self):
         self.frame += 1
         self.liftime += 1
 
         if self.heath > 0:
-            self.y -= 1
-            self.x = 200
+            self.y -= 0.6
+            self.x += 0.5
 
 
-        if self.liftime > 700:
-            self.x = 200
+        if self.liftime > 900:
+            self.x = -50
             self.y = 700
             self.heath = 1
             self.liftime = 0
@@ -56,7 +56,7 @@ class Small_Enemy:
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
-        if group == 'bullets:small_enemy':
+        if group == 'bullets:small_enemys':
             self.heath -= self.damage
 
             self.x = 200
