@@ -19,7 +19,7 @@ class Mid_Boss:
         if Mid_Boss.imageEF == None:
             Mid_Boss.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x,y,damage
-        self.heath = 200
+        self.heath = 500
         self.frame = 0
         self.die_img= 0
 
@@ -47,6 +47,7 @@ class Mid_Boss:
             self.x = math.cos(self.frame / 400 ) * 100 + 200
 
         else :
+            game_world.remove_collision_object(self)
             self.y -= 0.2
             self.die_img += 1
             if self.die_img % 100 == 0:
@@ -58,12 +59,8 @@ class Mid_Boss:
 
 
     def get_bb(self):
-        if self.heath > 0:
-            size_weath = 100
-            size_heigt = 10
-        else:
-            size_weath = 0
-            size_heigt = 0
+        size_weath = 100
+        size_heigt = 10
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
