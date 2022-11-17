@@ -19,7 +19,7 @@ class Enemy_Bullet:
     def draw(self):
 
         if self.lifetime > 0:
-            self.image.clip_composite_draw((int(self.frame/25) % 8)*8, 0, 8, 10, 0, '', self.x, self.y, 10, 12)
+            self.image.clip_composite_draw((int(self.frame/10) % 8)*8, 0, 8, 10, 0, '', self.x, self.y, 10, 12)
             draw_rectangle(*self.get_bb())
 
     def update(self):

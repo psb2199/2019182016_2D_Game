@@ -32,6 +32,7 @@ enemy_bullet = []
 gametime = 0
 ii = 0
 ee = 0
+ss = 0
 
 def handle_events():
     events = get_events()
@@ -58,7 +59,7 @@ def enter():
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
-    global small_enemys
+    global small_enemys, small_em_cnt, small_em_gap
 
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
@@ -115,7 +116,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global ii,ee,gametime
+    global ii,ee,ss,gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -127,7 +128,14 @@ def update():
     if ii + 1 > bullet_count:
         ii = 0
 
-    if mid_boss.heath > 0:
+
+    small_enemys[ss].damage = player.attack_power
+    ss += 1
+    if ss + 1 > small_em_cnt:
+        ss = 0
+
+
+    if mid_boss.heath > 0 and mid_boss.lifetime > mid_boss.spawntime + 1000:
         if enemy_bullets[ee].lifetime == 0:
             if ee % 2 ==0:
                 enemy_bullets[ee].x = mid_boss.x - 30
