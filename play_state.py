@@ -35,6 +35,7 @@ gametime = 0
 ii = 0
 ee = 0
 ss = 0
+ss2 = 0
 
 def handle_events():
     events = get_events()
@@ -61,7 +62,8 @@ def enter():
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
-    global small_enemys, small_enemys2, small_em_cnt, small_em_gap
+    global small_enemys, small_em_cnt1, small_em_gap1
+    global small_enemys2, small_em_cnt2, small_em_gap2
 
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
@@ -85,20 +87,30 @@ def enter():
         game_world.add_object(enemy_bullets[i], 0)
 
 
-
-    small_em_cnt = 10
-    small_em_gap = 50
-    small_enemys = [Small_Enemy() for i in range(small_em_cnt)]
-    for i in range(small_em_cnt):
+    small_em_cnt1 = 10
+    small_em_gap1 = 50
+    small_enemys = [Small_Enemy() for i in range(small_em_cnt1)]
+    for i in range(small_em_cnt1):
         if i % 2 == 0:
-            small_enemys[i].lifetime = -i * small_em_gap
+            small_enemys[i].lifetime = -i * small_em_gap1
             small_enemys[i].x = 200
         elif i % 2 == 1:
-            small_enemys[i].lifetime = -1 * (i-1) * small_em_gap
+            small_enemys[i].lifetime = -1 * (i-1) * small_em_gap1
             small_enemys[i].x = 200
         game_world.add_object(small_enemys[i], 1)
 
 
+    small_em_cnt2 = 2
+    small_em_gap2 = 50
+    small_enemys2 = [Small_Enemy2() for i in range(small_em_cnt2)]
+    for i in range(small_em_cnt2):
+        if i % 2 == 0:
+            small_enemys2[i].lifetime = -i * small_em_gap2
+            small_enemys2[i].x = 200
+        elif i % 2 == 1:
+            small_enemys2[i].lifetime = -1 * (i - 1) * small_em_gap2
+            small_enemys2[i].x = 200
+        game_world.add_object(small_enemys2[i], 1)
 
 
     player = Player()
@@ -125,7 +137,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global ii,ee,ss,gametime
+    global ii,ee,ss,ss2, gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -137,7 +149,7 @@ def update():
     if ii + 1 > bullet_count:
         ii = 0
 
-    # small_enemys2[ss].damage = player.attack_power
+
     small_enemys[ss].damage = player.attack_power
     if ss % 2 == 0:
         small_enemys[ss].dir_x = 0.3
@@ -148,10 +160,24 @@ def update():
         if small_enemys[ss].lifetime > 1500:
             small_enemys[ss].x = 450
 
-
     ss += 1
-    if ss + 1 > small_em_cnt:
+    if ss + 1 > small_em_cnt1:
         ss = 0
+
+
+    small_enemys2[ss2].damage = player.attack_power
+    if ss2 % 2 == 0:
+        small_enemys2[ss2].dir_x = 0.3
+        if small_enemys2[ss2].lifetime > 1500:
+            small_enemys2[ss2].x = -50
+    elif ss2 % 2 == 1:
+        small_enemys2[ss2].dir_x = -0.3
+        if small_enemys2[ss2].lifetime > 1500:
+            small_enemys2[ss2].x = 450
+
+    ss2 += 1
+    if ss2 + 1 > small_em_cnt2:
+        ss2 = 0
 
 
     if mid_boss.heath > 0 and mid_boss.lifetime > mid_boss.spawntime + 1000:
