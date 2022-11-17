@@ -10,6 +10,8 @@ from player import Player
 from powerup import Powerup
 from bullet import Bullet
 
+from small_enemy import Small_Enemy
+
 from mid_boss import Mid_Boss
 from enemy_bullet import Enemy_Bullet
 
@@ -21,6 +23,8 @@ cloud2 = None
 player = None
 powerup = None
 bullets = []
+
+small_enemy = None
 
 mid_boss = None
 enemy_bullet = []
@@ -54,6 +58,8 @@ def enter():
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
+    global small_enemy
+
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
 
@@ -63,7 +69,6 @@ def enter():
     game_world.add_object(background, 0)
     game_world.add_object(cloud, 0)
     game_world.add_object(cloud2, 0)
-
 
 
     mid_boss = Mid_Boss()
@@ -76,6 +81,8 @@ def enter():
         enemy_bullets[i].lifetime = -i * em_bulgap
         game_world.add_object(enemy_bullets[i], 0)
 
+    small_enemy = Small_Enemy()
+    game_world.add_object(small_enemy, 1)
 
     player = Player()
     game_world.add_object(player, 1)
@@ -89,9 +96,7 @@ def enter():
         game_world.add_object(bullets[i], 1)
 
 
-
-
-
+    game_world.add_collision_group(bullets, small_enemy, 'bullets:small_enemy')
     game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
     game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
 
