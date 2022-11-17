@@ -11,6 +11,7 @@ from powerup import Powerup
 from bullet import Bullet
 
 from small_enemy import Small_Enemy
+from small_enemy2 import Small_Enemy2
 
 from mid_boss import Mid_Boss
 from enemy_bullet import Enemy_Bullet
@@ -25,6 +26,7 @@ powerup = None
 bullets = []
 
 small_enemys = []
+small_enemys2 = []
 
 mid_boss = None
 enemy_bullet = []
@@ -59,7 +61,7 @@ def enter():
     global player, powerup
     global bullets, bullet_count,bullet_gap
 
-    global small_enemys, small_em_cnt, small_em_gap
+    global small_enemys, small_enemys2, small_em_cnt, small_em_gap
 
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
@@ -84,12 +86,18 @@ def enter():
 
 
 
-    small_em_cnt = 5
-    small_em_gap = 100
+    small_em_cnt = 10
+    small_em_gap = 50
     small_enemys = [Small_Enemy() for i in range(small_em_cnt)]
     for i in range(small_em_cnt):
-        small_enemys[i].liftime = -i * small_em_gap
+        if i % 2 == 0:
+            small_enemys[i].lifetime = -i * small_em_gap
+            small_enemys[i].x = 200
+        elif i % 2 == 1:
+            small_enemys[i].lifetime = -1 * (i-1) * small_em_gap
+            small_enemys[i].x = 200
         game_world.add_object(small_enemys[i], 1)
+
 
 
 
@@ -106,6 +114,7 @@ def enter():
 
 
     game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
+    game_world.add_collision_group(bullets, small_enemys2, 'bullets:small_enemys2')
     game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
     game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
 
@@ -128,8 +137,18 @@ def update():
     if ii + 1 > bullet_count:
         ii = 0
 
-
+    # small_enemys2[ss].damage = player.attack_power
     small_enemys[ss].damage = player.attack_power
+    if ss % 2 == 0:
+        small_enemys[ss].dir_x = 0.3
+        if small_enemys[ss].lifetime > 1500:
+            small_enemys[ss].x = -50
+    elif ss % 2 == 1:
+        small_enemys[ss].dir_x = -0.3
+        if small_enemys[ss].lifetime > 1500:
+            small_enemys[ss].x = 450
+
+
     ss += 1
     if ss + 1 > small_em_cnt:
         ss = 0

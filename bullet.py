@@ -125,6 +125,14 @@ class Bullet:
 
             self.x = 500
             self.y = 0
+
+        elif group == 'bullets:small_enemys2':
+            self.effect_x = self.x
+            self.effect_y = self.y
+            self.eff_swt = True
+
+            self.x = 500
+            self.y = 0
         else:
             self.eff_swt = False
 

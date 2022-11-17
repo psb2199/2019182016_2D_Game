@@ -23,7 +23,7 @@ class Mid_Boss:
             Mid_Boss.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x,y,damage
         self.heath = 1000
-        self.spawntime = 10000
+        self.spawntime = 5000
         self.lifetime = 0
 
         self.frame = 0
@@ -50,7 +50,7 @@ class Mid_Boss:
             self.image_die.clip_composite_draw((int(self.frame / 10) % 1) * 240, 0, (self.frame%2)*240, 120, 0, '', self.x, self.y, 240 - self.die_img/5,
                                            120 - self.die_img/ 10)
             self.imageEF.clip_composite_draw((int(self.frame / 10) % 13) * 30, 0, 30, 27, 0, '',
-                                             self.effect_x, self.effect_y, 30, 27)
+                                             self.effect_x, self.effect_y, 40, 40)
         draw_rectangle(*self.get_bb())
 
     def update(self):
