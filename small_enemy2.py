@@ -20,6 +20,7 @@ class Small_Enemy2:
         self.die_x = 0
         self.die_y = 0
         self.liftime = 0
+
         self.x = random.randint(50,350)
 
         self.frame = 0
