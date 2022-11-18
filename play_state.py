@@ -121,8 +121,11 @@ def enter():
     game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
     game_world.add_collision_group(bullets, small_enemy2, 'bullets:small_enemy2')
     game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
-    game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
+
     game_world.add_collision_group(player, powerups, 'player:powerups')
+    game_world.add_collision_group(player, enemy_bullets, 'player:enemy_bullets')
+    game_world.add_collision_group(player, small_enemys, 'player:small_enemys')
+    game_world.add_collision_group(player, small_enemy2, 'player:small_enemy2')
 
 
 
@@ -161,11 +164,13 @@ def update():
 
     small_enemy2.damage = player.attack_power
     if small_enemy2.died == True:
+        powerups[pp].died = False
         powerups[pp].x = small_enemy2.die_x
         powerups[pp].y = small_enemy2.die_y
     pp += 1
     if pp + 1> 3:
         pp = 0
+
 
     if mid_boss.heath > 0 and mid_boss.lifetime > mid_boss.spawntime + 1000:
         if enemy_bullets[ee].lifetime == 0:

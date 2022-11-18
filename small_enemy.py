@@ -65,8 +65,8 @@ class Small_Enemy:
     def handle_collision(self, other, group):
         if group == 'bullets:small_enemys':
             self.heath -= self.damage
-
-
+        if group == 'player:small_enemys':
+            print("gameover")
 
 
 

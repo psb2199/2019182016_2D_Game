@@ -39,7 +39,7 @@ class Small_Enemy2:
 
         if self.heath > 0:
             self.died = False
-            self.y = -1/100000*(self.liftime - 800)*(self.liftime - 1000)*(self.liftime - 1100) + 400
+            self.y = -1/100000*(self.liftime - 3900)*(self.liftime - 4000)*(self.liftime - 4100) + 400
         else:
             self.died = True
             self.die_x = self.x
@@ -51,7 +51,7 @@ class Small_Enemy2:
 
 
 
-        if self.liftime > 3000:
+        if self.liftime > 5000:
             self.x = random.randint(50,350)
             self.y = 700
             self.heath = health
@@ -72,6 +72,8 @@ class Small_Enemy2:
     def handle_collision(self, other, group):
         if group == 'bullets:small_enemy2':
             self.heath -= self.damage
+        if group == 'player:small_enemy2':
+            print("gameover")
 
 
 

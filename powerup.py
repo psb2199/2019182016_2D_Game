@@ -18,6 +18,8 @@ class Powerup:
         self.dir_x = random.randint(-5, 5)
         self.dir_y = random.randint(-5, 5)
 
+        self.died = True
+
         if Powerup.image == None:
             Powerup.image = load_image('resources\\Item_Power.png')
 
@@ -28,17 +30,21 @@ class Powerup:
 
 
     def update(self):
-        self.x += self.dir_x / 5
-        self.y += self.dir_y / 5
-        self.frame += 1
-        if self.y < 0 :
-            self.dir_y = random.randint(1, 5)
-        if self.y > 600 :
-            self.dir_y = random.randint(-5, -1)
-        if self.x < 0 :
-            self.dir_x = random.randint(1, 5)
-        if self.x > 400  :
-            self.dir_x = random.randint(-5, -1)
+        if self.died == True:
+            self.x = -100
+            self.y = -100
+        else:
+            self.x += self.dir_x / 5
+            self.y += self.dir_y / 5
+            self.frame += 1
+            if self.y < 0 :
+                self.dir_y = random.randint(1, 5)
+            if self.y > 600 :
+                self.dir_y = random.randint(-5, -1)
+            if self.x < 0 :
+                self.dir_x = random.randint(1, 5)
+            if self.x > 400  :
+                self.dir_x = random.randint(-5, -1)
 
 
 
@@ -49,9 +55,9 @@ class Powerup:
 
 
     def handle_collision(self, other, group):
-        print('powerup disappears')
-        if group == 'player:powerups':
 
+        if group == 'player:powerups':
+            self.died = True
             self.x = -100
             self.y = -100
 
