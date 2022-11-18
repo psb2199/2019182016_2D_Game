@@ -1,22 +1,26 @@
 from pico2d import *
 import game_framework
-import game_world
-import math
+
 import random
 
-health = 1
+
+health = 20
 
 class Small_Enemy2:
     image = None
 
 
-    def __init__(self,x = 0,y=0,damage = 1):
+    def __init__(self,y=700,damage = 1):
         if Small_Enemy2.image == None:
             Small_Enemy2.image = load_image('resources\\enemy2.png')
 
-        self.x, self.y, self.damage = x,y,damage
+        self.y, self.damage = y,damage
         self.heath = health
+        self.died = False
+        self.die_x = 0
+        self.die_y = 0
         self.liftime = 0
+        self.x = random.randint(50,350)
 
         self.frame = 0
 
@@ -26,7 +30,7 @@ class Small_Enemy2:
 
     def draw(self):
         if self.heath > 0:
-            self.image.clip_composite_draw((int(self.frame/10) % 11)*32, 0, 32, 36, -0.6, '', self.x, self.y, 32, 36)
+            self.image.clip_composite_draw(0*32, 0, 32, 36, 0, '', self.x, self.y, 48, 54)
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -34,15 +38,22 @@ class Small_Enemy2:
         self.liftime += 1
 
         if self.heath > 0:
-            self.y -= 0.6
-            self.x -= 0.3
+            self.died = False
+            self.y = -1/100000*(self.liftime - 800)*(self.liftime - 1000)*(self.liftime - 1100) + 400
         else:
-            self.x = -50
-            self.y = -100
+            self.died = True
+            self.die_x = self.x
+            self.die_y = self.y
 
-        if self.liftime > 2000:
-            self.x = 450
-            self.y = 700 - random.randint(-20,0)
+            self.x = -100
+            self.y = -100
+            self.heath = health
+
+
+
+        if self.liftime > 3000:
+            self.x = random.randint(50,350)
+            self.y = 700
             self.heath = health
             self.liftime = 0
 
@@ -54,12 +65,12 @@ class Small_Enemy2:
 
 
     def get_bb(self):
-        size_weath = 13
-        size_heigt = 15
+        size_weath = 20
+        size_heigt = 4
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
-        if group == 'bullets:small_enemys2':
+        if group == 'bullets:small_enemy2':
             self.heath -= self.damage
 
 

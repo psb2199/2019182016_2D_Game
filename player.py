@@ -201,7 +201,7 @@ class Player:
 
     def handle_collision(self, other, group):
 
-        if group == 'player:powerup':
+        if group == 'player:powerups':
             self.bullet_level += 1
             self.attack_power += 1
         if group == 'enemy_bullets:player':

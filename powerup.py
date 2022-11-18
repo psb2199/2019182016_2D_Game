@@ -11,7 +11,7 @@ class Powerup:
     image = None
 
 
-    def __init__(self, x = 200, y = 300):
+    def __init__(self, x = -100, y = -100):
         self.x, self.y= x, y
         self.frame = 0
 
@@ -50,12 +50,10 @@ class Powerup:
 
     def handle_collision(self, other, group):
         print('powerup disappears')
-        if group == 'player:powerup':
-            self.x, self.y = 200, 300
-            self.dir_x = random.randint(-5, 5)
-            self.dir_y = random.randint(-5, 5)
+        if group == 'player:powerups':
 
-            game_world.remove_object(self)
+            self.x = -100
+            self.y = -100
 
 
 

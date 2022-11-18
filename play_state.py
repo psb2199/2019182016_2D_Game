@@ -22,11 +22,11 @@ cloud = None
 cloud2 = None
 
 player = None
-powerup = None
+powerups = []
 bullets = []
 
 small_enemys = []
-small_enemys2 = []
+small_enemy2 = None
 
 mid_boss = None
 enemy_bullet = []
@@ -36,6 +36,7 @@ ii = 0
 ee = 0
 ss = 0
 ss2 = 0
+pp = 0
 
 def handle_events():
     events = get_events()
@@ -46,8 +47,8 @@ def handle_events():
             game_framework.quit()
 
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            game_world.add_object(powerup, 1)
-            game_world.add_collision_group(player, powerup, 'player:powerup')
+            # game_world.add_object(powerup, 1)
+            # game_world.add_collision_group(player, powerup, 'player:powerup')
             pass
 
         else:
@@ -59,11 +60,11 @@ def enter():
     # global gametime
     global background, cloud, cloud2
 
-    global player, powerup
+    global player, powerups
     global bullets, bullet_count,bullet_gap
 
     global small_enemys, small_em_cnt1, small_em_gap1
-    global small_enemys2, small_em_cnt2, small_em_gap2
+    global small_enemy2
 
     global mid_boss
     global enemy_bullets, em_bulcnt, em_bulgap
@@ -100,22 +101,14 @@ def enter():
         game_world.add_object(small_enemys[i], 1)
 
 
-    small_em_cnt2 = 2
-    small_em_gap2 = 50
-    small_enemys2 = [Small_Enemy2() for i in range(small_em_cnt2)]
-    for i in range(small_em_cnt2):
-        if i % 2 == 0:
-            small_enemys2[i].lifetime = -i * small_em_gap2
-            small_enemys2[i].x = 200
-        elif i % 2 == 1:
-            small_enemys2[i].lifetime = -1 * (i - 1) * small_em_gap2
-            small_enemys2[i].x = 200
-        game_world.add_object(small_enemys2[i], 1)
-
+    small_enemy2 = Small_Enemy2()
+    game_world.add_object(small_enemy2, 1)
 
     player = Player()
     game_world.add_object(player, 1)
-    powerup = Powerup()
+    powerups = [Powerup() for i in range(3)]
+    for i in range(3):
+        game_world.add_object(powerups[i], 1)
 
     bullet_count = 10  # 10개 권장
     bullet_gap = 20  # 20 권장
@@ -126,9 +119,10 @@ def enter():
 
 
     game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
-    game_world.add_collision_group(bullets, small_enemys2, 'bullets:small_enemys2')
+    game_world.add_collision_group(bullets, small_enemy2, 'bullets:small_enemy2')
     game_world.add_collision_group(bullets, mid_boss, 'bullets:mid_boss')
     game_world.add_collision_group(enemy_bullets, player, 'enemy_bullets:player')
+    game_world.add_collision_group(player, powerups, 'player:powerups')
 
 
 
@@ -137,7 +131,7 @@ def exit():
     game_world.clear()
 
 def update():
-    global ii,ee,ss,ss2, gametime
+    global ii,ee,ss,pp, gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -165,20 +159,13 @@ def update():
         ss = 0
 
 
-    small_enemys2[ss2].damage = player.attack_power
-    if ss2 % 2 == 0:
-        small_enemys2[ss2].dir_x = 0.3
-        if small_enemys2[ss2].lifetime > 1500:
-            small_enemys2[ss2].x = -50
-    elif ss2 % 2 == 1:
-        small_enemys2[ss2].dir_x = -0.3
-        if small_enemys2[ss2].lifetime > 1500:
-            small_enemys2[ss2].x = 450
-
-    ss2 += 1
-    if ss2 + 1 > small_em_cnt2:
-        ss2 = 0
-
+    small_enemy2.damage = player.attack_power
+    if small_enemy2.died == True:
+        powerups[pp].x = small_enemy2.die_x
+        powerups[pp].y = small_enemy2.die_y
+    pp += 1
+    if pp + 1> 3:
+        pp = 0
 
     if mid_boss.heath > 0 and mid_boss.lifetime > mid_boss.spawntime + 1000:
         if enemy_bullets[ee].lifetime == 0:
