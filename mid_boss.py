@@ -23,7 +23,7 @@ class Mid_Boss:
             Mid_Boss.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x,y,damage
         self.heath = 1000
-        self.spawntime = 6000
+        self.spawntime = 4000
         self.lifetime = 0
 
         self.frame = 0
