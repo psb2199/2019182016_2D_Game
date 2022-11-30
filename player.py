@@ -204,6 +204,8 @@ class Player:
         if group == 'player:powerups':
             self.bullet_level += 1
             self.attack_power += 1
+            if(self.attack_power > 6):
+                self.attack_power = 6
         if group == 'player:enemy_bullets':
             print("gameover")
         pass

@@ -11,7 +11,7 @@ class Background:
         self.frame += 0.1
 
     def draw(self):
-        self.image.clip_draw(0, int(self.frame), 400, 600, 200, 300)
+        self.image.clip_draw(0, min(int(self.frame),1800), 400, 600, 200, 300)
 
 
 class Background_cloud:
