@@ -2,32 +2,30 @@ from pico2d import *
 import game_framework
 
 import random
+import math
 
+health = 10
 
-health = 20
-
-class mid_enemy:
+class Mid_Enemy:
     image = None
 
-    def __init__(self,y=700,damage = 1):
-        if mid_enemy.image == None:
-            mid_enemy.image = load_image('resources\\enemy2.png')
+    def __init__(self,y=300,x = 200,damage = 1):
+        if Mid_Enemy.image == None:
+            Mid_Enemy.image = load_image('resources\\mid_enemy.png')
 
-        self.y, self.damage = y,damage
+        self.y, self.x ,self.damage = y, x, damage
         self.heath = health
         self.died = False
         self.die_x = 0
         self.die_y = 0
         self.liftime = 0
 
-        self.x = random.randint(50,350)
-
         self.frame = 0
 
 
     def draw(self):
         if self.heath > 0:
-            self.image.clip_composite_draw(0*32, 0, 32, 36, 0, '', self.x, self.y, 48, 54)
+            self.image.clip_composite_draw(0*32, 0, 310, 335, 0, '', self.x, self.y, 100, 110)
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -36,7 +34,8 @@ class mid_enemy:
 
         if self.heath > 0:
             self.died = False
-            self.y = -1/100000*(self.liftime - 3900)*(self.liftime - 4000)*(self.liftime - 4100) + 400
+            self.x = 100 * math.cos(self.frame / 200) + 200
+            self.y = 100 * math.sin(self.frame / 200) + 300
         else:
             self.died = True
             self.die_x = self.x
@@ -44,11 +43,10 @@ class mid_enemy:
 
             self.x = -100
             self.y = -100
-            self.heath = health
+
 
 
         if self.liftime > 5000:
-            self.x = random.randint(50,350)
             self.y = 700
             self.heath = health
             self.liftime = 0
@@ -63,9 +61,9 @@ class mid_enemy:
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
-        if group == 'bullets:small_enemy2':
+        if group == 'bullets:mid_enemy':
             self.heath -= self.damage
-        if group == 'player:small_enemy2':
+        if group == 'player:mid_enemy':
             print("gameover")
 
 
