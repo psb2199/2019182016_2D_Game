@@ -25,7 +25,7 @@ class Mid_Enemy:
 
     def draw(self):
         if self.heath > 0:
-            self.image.clip_composite_draw(0*32, 0, 310, 335, 0, '', self.x, self.y, 100, 110)
+            self.image.clip_composite_draw((int(self.frame / 10) % 2)*310, 0, 310, 335, 0, '', self.x, self.y, 100, 110)
         draw_rectangle(*self.get_bb())
 
     def update(self):
