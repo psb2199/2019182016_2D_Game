@@ -4,7 +4,7 @@ import game_framework
 import random
 
 
-health = 20
+health = 10
 
 class Small_Enemy2:
     image = None

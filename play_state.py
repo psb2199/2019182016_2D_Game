@@ -117,6 +117,7 @@ def enter():
     bullet_gap = 20  # 20 권장
     bullets = [Bullet() for i in range(bullet_count)]
     for i in range(bullet_count):
+
         bullets[i].lifetime = -i * bullet_gap
         game_world.add_object(bullets[i], 1)
 

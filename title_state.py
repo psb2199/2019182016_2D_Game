@@ -6,10 +6,20 @@ import play_state
 image = None
 title = None
 
+bgm = None
+buttonsound = None
+
 def enter():
-    global image,title,framedown,onoff
+    global image,title,bgm,framedown,onoff,buttonsound
     image = load_image('resources\\title.png')
     title = load_image('resources\\PRESSkey.png')
+
+    bgm = load_wav('resources\\sound\\start.wav')
+    bgm.set_volume(32)
+    bgm.play()
+
+    buttonsound = load_wav('resources\\sound\\startbutton.wav')
+    buttonsound.set_volume(32)
 
     global frame,framedown
     frame = 0
@@ -22,7 +32,7 @@ def exit():
 
 def handle_events():
     global onoff
-    global frame, framedown
+    global frame, framedown,buttonsound,bgm
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -32,6 +42,8 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
                 onoff = True
+                bgm = None
+                buttonsound.play()
 
 
 def update():

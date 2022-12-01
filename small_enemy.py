@@ -8,7 +8,7 @@ health = 2
 
 class Small_Enemy:
     image = None
-
+    explo_sound = None
 
     def __init__(self,y=0,damage = 1):
         if Small_Enemy.image == None:
@@ -23,7 +23,9 @@ class Small_Enemy:
 
         self.frame = 0
 
-
+        if Small_Enemy.explo_sound is None:
+            Small_Enemy.explo_sound = load_wav('resources\\sound\\explo.wav')
+            Small_Enemy.explo_sound.set_volume(32)
 
 
 
@@ -41,7 +43,9 @@ class Small_Enemy:
             self.y -= 0.6
             self.x += self.dir_x
         else:
+            Small_Enemy.explo_sound.play()
             self.y = -100
+            self.heath = health
 
 
         if self.lifetime > 2000:

@@ -1,11 +1,18 @@
 from pico2d import *
 import game_world
+import game_framework
 import random
 
 class Background:
+    bgm = None
     def __init__(self):
         self.image = load_image('resources\\Map.png')
         self.frame = 0
+
+        if Background.bgm is None:
+            Background.bgm = load_music('resources\\sound\\playmusic.mp3')
+            Background.bgm.set_volume(32)
+            Background.bgm.play()
 
     def update(self):
         self.frame += 0.1
@@ -48,3 +55,14 @@ class Background_cloud2:
         self.image.clip_composite_draw(0, 0, 400, 400, 0, '', self.x, self.y, 500, 500)
 
 
+
+
+def test_self():
+    import play_state
+
+    pico2d.open_canvas(400, 600)
+    game_framework.run(play_state)
+    pico2d.clear_canvas()
+
+if __name__ == '__main__':
+    test_self()

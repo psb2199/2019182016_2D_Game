@@ -21,6 +21,8 @@ class Bullet:
 
     imageEF = None
 
+    fire_sound = None
+
     def __init__(self, x = 200, y = 700, velocity = RUN_SPEED_PPS, bullet_level = 1):
         self.x, self.y, self.velocity, self.bullet_level = x, y, velocity, bullet_level
         self.lifetime = 0
@@ -43,6 +45,10 @@ class Bullet:
         if Bullet.imageEF == None:
             Bullet.imageEF = load_image('resources\\Effect.png')
 
+        if Bullet.fire_sound == None:
+            Bullet.fire_sound = load_wav('resources\\sound\\bullet_fire.wav')
+            Bullet.fire_sound.set_volume(10)
+
     def draw(self):
 
         if self.lifetime > 0:
@@ -62,7 +68,7 @@ class Bullet:
 
             if self.eff_swt == True:
                 self.imageEF.clip_composite_draw((int(self.effect_lifetime) % 13) * 30, 0, 30, 27, 0, '',
-                                                 self.effect_x, self.effect_y, 30, 27)
+                                                 self.effect_x, self.effect_y, 45, 45)
 
         #draw_rectangle(*self.get_bb())
 
@@ -84,6 +90,9 @@ class Bullet:
         if self.lifetime > 200:
             self.y = self.y
             self.lifetime = 0
+            Bullet.fire_sound.play(1)
+
+
 
 
     def get_bb(self):

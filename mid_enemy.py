@@ -1,58 +1,81 @@
 from pico2d import *
 import game_framework
-
+import game_world
 import random
 import math
 
-health = 10
 
 class Mid_Enemy:
     image = None
+    image_hit = None
+    image_die = None
+    imageEF = None
 
-    def __init__(self,y=300,x = 200,damage = 1):
+    def __init__(self,y=700,x = 200,damage = 1):
         if Mid_Enemy.image == None:
             Mid_Enemy.image = load_image('resources\\mid_enemy.png')
+        if Mid_Enemy.image_hit == None:
+            Mid_Enemy.image_hit = load_image('resources\\mid_Boss_hit.png')
+        if Mid_Enemy.image_die == None:
+            Mid_Enemy.image_die = load_image('resources\\mid_Boss_destroied.png')
+        if Mid_Enemy.imageEF == None:
+            Mid_Enemy.imageEF = load_image('resources\\Effect.png')
+        self.x, self.y, self.damage = x, y, damage
+        self.heath = 50
+        self.spawntime = 1000
+        self.lifetime = 0
 
-        self.y, self.x ,self.damage = y, x, damage
-        self.heath = health
-        self.died = False
-        self.die_x = 0
-        self.die_y = 0
-        self.liftime = 0
+        self.frame = -self.spawntime
+        self.die_img = 0
 
-        self.frame = 0
+        self.start_y = 0
+        self.hit = False
+        self.hit_count = 0
 
+        self.effect_x = 0
+        self.effect_y = 0
 
     def draw(self):
         if self.heath > 0:
-            self.image.clip_composite_draw((int(self.frame / 10) % 2)*310, 0, 310, 335, 0, '', self.x, self.y, 100, 110)
+            if self.hit == True:
+                self.image_hit.clip_composite_draw(0, 0, 240, 120, 0, '', self.x, self.y, 240, 120)
+            else:
+                self.image.clip_composite_draw((int(self.frame / 10) % 2)*310, 0, 310, 335, 0, '', self.x, self.y, 100, 110)
+        else:
+            self.image_die.clip_composite_draw((int(self.frame / 10) % 1) * 240, 0, (self.frame%2)*240, 120, 0, '', self.x, self.y, 240 - self.die_img/5,
+                                           120 - self.die_img/ 10)
+            self.imageEF.clip_composite_draw((int(self.frame / 10) % 13) * 30, 0, 30, 27, 0, '',
+                                             self.effect_x, self.effect_y, 40, 40)
         draw_rectangle(*self.get_bb())
 
+
+
+
     def update(self):
+        if self.hit == True:
+            self.hit_count += 1
+            if self.hit_count > 10:
+                self.hit_count = 0
+                self.hit = False
+
         self.frame += 1
-        self.liftime += 1
+        self.lifetime += 1
+        if self.lifetime > self.spawntime:
+            self.start_y += 0.1
+            if self.heath > 0:
+                self.x = 100 * math.cos(self.frame / 200) + 200
+                self.y = 100000 / self.frame + 400
 
-        if self.heath > 0:
-            self.died = False
-            self.x = 100 * math.cos(self.frame / 200) + 200
-            self.y = 100 * math.sin(self.frame / 200) + 300
-        else:
-            self.died = True
-            self.die_x = self.x
-            self.die_y = self.y
-
-            self.x = -100
-            self.y = -100
-
-
-
-        if self.liftime > 5000:
-            self.y = 700
-            self.heath = health
-            self.liftime = 0
-
-            self.frame = 0
-
+            else :
+                game_world.remove_collision_object(self)
+                self.y -= 0.2
+                self.die_img += 1
+                if self.die_img % 100 == 0:
+                    self.effect_x = self.x + random.randint(-40,40)
+                    self.effect_y = self.y + random.randint(-20, 20)
+                if self.die_img > 600:
+                    game_world.remove_object(self)
+                    self.die_img = 0
 
 
     def get_bb(self):
@@ -63,6 +86,7 @@ class Mid_Enemy:
     def handle_collision(self, other, group):
         if group == 'bullets:mid_enemy':
             self.heath -= self.damage
+            self.hit = True
         if group == 'player:mid_enemy':
             print("gameover")
 
