@@ -21,7 +21,7 @@ class Mid_Enemy:
         if Mid_Enemy.imageEF == None:
             Mid_Enemy.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x, y, damage
-        self.heath = 50
+        self.heath = 1000
         self.spawntime = 1000
         self.lifetime = 0
 

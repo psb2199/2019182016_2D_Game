@@ -5,7 +5,7 @@ import math
 import random
 
 
-class Mid_Boss:
+class Boss:
     image = None
     image_hit = None
     image_die = None
@@ -13,16 +13,16 @@ class Mid_Boss:
 
 
     def __init__(self,x = 200,y=-100,damage = 1):
-        if Mid_Boss.image == None:
-            Mid_Boss.image = load_image('resources\\mid_Boss.png')
-        if Mid_Boss.image_hit == None:
-            Mid_Boss.image_hit = load_image('resources\\mid_Boss_hit.png')
-        if Mid_Boss.image_die == None:
-            Mid_Boss.image_die = load_image('resources\\mid_Boss_destroied.png')
-        if Mid_Boss.imageEF == None:
-            Mid_Boss.imageEF = load_image('resources\\Effect.png')
+        if Boss.image == None:
+            Boss.image = load_image('resources\\mid_Boss.png')
+        if Boss.image_hit == None:
+            Boss.image_hit = load_image('resources\\mid_Boss_hit.png')
+        if Boss.image_die == None:
+            Boss.image_die = load_image('resources\\mid_Boss_destroied.png')
+        if Boss.imageEF == None:
+            Boss.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x,y,damage
-        self.heath = 1000
+        self.heath = 100
         self.spawntime = 4000
         self.lifetime = 0
 
@@ -86,7 +86,7 @@ class Mid_Boss:
         return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
     def handle_collision(self, other, group):
-        if group == 'bullets:mid_boss':
+        if group == 'bullets:boss':
             self.heath -= self.damage
             self.hit = True
 

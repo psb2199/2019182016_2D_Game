@@ -119,7 +119,7 @@ class Bullet:
 
     def handle_collision(self, other, group):
         # print('bullet disappears')
-        if group == 'bullets:mid_boss':
+        if group == 'bullets:boss':
             self.effect_x = self.x + random.randint(-10,10)
             self.effect_y = self.y + random.randint(-10,10)
             self.eff_swt = True

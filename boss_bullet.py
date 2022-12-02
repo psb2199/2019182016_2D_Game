@@ -3,13 +3,13 @@ import game_framework
 import random
 
 
-class Enemy_Bullet:
+class Boss_Bullet:
     image = None
 
 
     def __init__(self,x = 600,y=700,velocity_y = 0.5,velocity_x = random.randint(-20,20)):
-        if Enemy_Bullet.image == None:
-            Enemy_Bullet.image = load_image('resources\\Enemy_Bullet.png')
+        if Boss_Bullet.image == None:
+            Boss_Bullet.image = load_image('resources\\Enemy_Bullet.png')
         self.x, self.y, self.velocity_y,self.velocity_x = x,y,velocity_y,velocity_x
         self.lifetime = 0
         self.frame = 0

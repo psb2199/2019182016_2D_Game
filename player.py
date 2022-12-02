@@ -206,7 +206,7 @@ class Player:
             self.attack_power += 1
             if(self.attack_power > 2):
                 self.attack_power = 2
-        if group == 'player:enemy_bullets':
+        if group == 'player:boss_bullets':
             print("gameover")
         pass
 
