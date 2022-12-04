@@ -208,6 +208,10 @@ class Player:
                 self.attack_power = 2
         if group == 'player:boss_bullets':
             print("gameover")
+        if group == 'player:mid_enemy_bullets':
+            print("gameover")
+
+
         pass
 
 

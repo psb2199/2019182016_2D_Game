@@ -12,7 +12,9 @@ from bullet import Bullet
 
 from small_enemy import Small_Enemy
 from small_enemy2 import Small_Enemy2
+
 from mid_enemy import Mid_Enemy
+from mid_enemy_bullet import Mid_Enemy_Bullet
 
 from boss import Boss
 from boss_bullet import Boss_Bullet
@@ -28,7 +30,9 @@ bullets = []
 
 small_enemys = []
 small_enemy2 = None
+
 mid_enemy = None
+mid_enemy_bullets = []
 
 boss = None
 boss_bullets = []
@@ -36,6 +40,7 @@ boss_bullets = []
 gametime = 0
 ii = 0
 ee = 0
+mm = 0
 ss = 0
 ss2 = 0
 pp = 0
@@ -67,7 +72,9 @@ def enter():
 
     global small_enemys, small_em_cnt1, small_em_gap1
     global small_enemy2
+
     global mid_enemy
+    global mid_enemy_bullets, mid_em_bulcnt, mid_em_bulgap
 
     global boss
     global boss_bullets, boss_bulcnt, boss_bulgap
@@ -89,6 +96,17 @@ def enter():
     for i in range(boss_bulcnt):
         boss_bullets[i].lifetime = -i * boss_bulgap
         game_world.add_object(boss_bullets[i], 0)
+
+
+    mid_enemy = Mid_Enemy()
+    game_world.add_object(mid_enemy, 1)
+
+    mid_em_bulcnt = 5
+    mid_em_bulgap = 20
+    mid_enemy_bullets = [Mid_Enemy_Bullet() for i in range(mid_em_bulcnt)]
+    for i in range(mid_em_bulcnt):
+        mid_enemy_bullets[i].lifetime = -i * mid_em_bulgap
+        game_world.add_object(mid_enemy_bullets[i], 0)
 
 
     small_em_cnt1 = 10
@@ -121,8 +139,7 @@ def enter():
         bullets[i].lifetime = -i * bullet_gap
         game_world.add_object(bullets[i], 1)
 
-    mid_enemy = Mid_Enemy()
-    game_world.add_object(mid_enemy, 1)
+
 
     game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
     game_world.add_collision_group(bullets, small_enemy2, 'bullets:small_enemy2')
@@ -131,6 +148,7 @@ def enter():
 
 
     game_world.add_collision_group(player, powerups, 'player:powerups')
+    game_world.add_collision_group(player, mid_enemy_bullets, 'player:mid_enemy_bullets')
     game_world.add_collision_group(player, boss_bullets, 'player:boss_bullets')
     game_world.add_collision_group(player, small_enemys, 'player:small_enemys')
     game_world.add_collision_group(player, small_enemy2, 'player:small_enemy2')
@@ -145,7 +163,7 @@ def exit():
 
 
 def update():
-    global ii,ee,ss,pp, gametime
+    global ii,ee,ss,pp,mm, gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -194,8 +212,20 @@ def update():
         if ee + 1 > boss_bulcnt:
             ee = 0
 
-
     boss.damage = player.attack_power
+
+
+    if mid_enemy.heath > 0 and mid_enemy.lifetime > mid_enemy.spawntime + 1000:
+        if mid_enemy_bullets[mm].lifetime == 0:
+            mid_enemy_bullets[mm].x = mid_enemy.x
+            mid_enemy_bullets[mm].y = mid_enemy.y - 10
+            mid_enemy_bullets[mm].player_x = player.x
+            mid_enemy_bullets[mm].player_y = player.y
+            mm += 1
+        if mm + 1 > mid_em_bulcnt:
+            mm = 0
+
+    mid_enemy.damage = player.attack_power
 
 
     for a,b, group in game_world.all_collision_pairs():
