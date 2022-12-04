@@ -36,10 +36,12 @@ mid_enemy_bullets = []
 
 boss = None
 boss_bullets = []
+boos_bullets2 = []
 
 gametime = 0
 ii = 0
 ee = 0
+ee2 = 0
 mm = 0
 ss = 0
 ss2 = 0
@@ -78,6 +80,7 @@ def enter():
 
     global boss
     global boss_bullets, boss_bulcnt, boss_bulgap
+    global boss_bullets2 , boss_bulcnt2, boss_bulgap2
 
     background = Background()
     cloud = Background_cloud()
@@ -97,15 +100,22 @@ def enter():
         boss_bullets[i].lifetime = -i * boss_bulgap
         game_world.add_object(boss_bullets[i], 0)
 
+    boss_bulcnt2 = 5
+    boss_bulgap2 = 20
+    boss_bullets2 = [Mid_Enemy_Bullet() for i in range(boss_bulcnt2)]
+    for i in range(boss_bulcnt2):
+        boss_bullets2[i].lifetime = -i * boss_bulgap2
+        game_world.add_object(boss_bullets2[i], 0)
+
 
     mid_enemy = Mid_Enemy()
     game_world.add_object(mid_enemy, 1)
 
-    mid_em_bulcnt = 5
+    mid_em_bulcnt = 2
     mid_em_bulgap = 20
     mid_enemy_bullets = [Mid_Enemy_Bullet() for i in range(mid_em_bulcnt)]
     for i in range(mid_em_bulcnt):
-        mid_enemy_bullets[i].lifetime = -i * mid_em_bulgap
+        mid_enemy_bullets[i].lifetime = -i * mid_em_bulgap - 100
         game_world.add_object(mid_enemy_bullets[i], 0)
 
 
@@ -150,6 +160,7 @@ def enter():
     game_world.add_collision_group(player, powerups, 'player:powerups')
     game_world.add_collision_group(player, mid_enemy_bullets, 'player:mid_enemy_bullets')
     game_world.add_collision_group(player, boss_bullets, 'player:boss_bullets')
+    game_world.add_collision_group(player, boss_bullets2, 'player:mid_enemy_bullets')
     game_world.add_collision_group(player, small_enemys, 'player:small_enemys')
     game_world.add_collision_group(player, small_enemy2, 'player:small_enemy2')
     game_world.add_collision_group(player, small_enemy2, 'player:mid_enemy')
@@ -163,7 +174,7 @@ def exit():
 
 
 def update():
-    global ii,ee,ss,pp,mm, gametime
+    global ii,ee,ee2, ss,pp,mm, gametime
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -212,10 +223,19 @@ def update():
         if ee + 1 > boss_bulcnt:
             ee = 0
 
+        if boss_bullets2[ee2].lifetime == 0:
+            boss_bullets2[ee2].x = boss.x
+            boss_bullets2[ee2].y = boss.y - 10
+            boss_bullets2[ee2].player_x = player.x
+            boss_bullets2[ee2].player_y = player.y
+            ee2 += 1
+        if ee2 + 1 > boss_bulcnt2:
+            ee2 = 0
+
     boss.damage = player.attack_power
 
 
-    if mid_enemy.heath > 0 and mid_enemy.lifetime > mid_enemy.spawntime + 1000:
+    if mid_enemy.heath > 0 and mid_enemy.lifetime > 0:
         if mid_enemy_bullets[mm].lifetime == 0:
             mid_enemy_bullets[mm].x = mid_enemy.x
             mid_enemy_bullets[mm].y = mid_enemy.y - 10

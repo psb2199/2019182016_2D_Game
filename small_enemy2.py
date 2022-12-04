@@ -40,7 +40,7 @@ class Small_Enemy2:
 
         if self.heath > 0:
             self.died = False
-            self.y = -1/100000*(self.liftime - 3900)*(self.liftime - 4000)*(self.liftime - 4100) + 400
+            self.y = -1/100000*(self.liftime - 2900)*(self.liftime - 3000)*(self.liftime - 3100) + 400
         else:
             self.died = True
             self.die_x = self.x
@@ -52,7 +52,7 @@ class Small_Enemy2:
 
 
 
-        if self.liftime > 5000:
+        if self.liftime > 4000:
             self.x = random.randint(50,350)
             self.y = 700
             self.heath = health

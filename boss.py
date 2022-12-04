@@ -22,8 +22,8 @@ class Boss:
         if Boss.imageEF == None:
             Boss.imageEF = load_image('resources\\Effect.png')
         self.x, self.y, self.damage = x,y,damage
-        self.heath = 100
-        self.spawntime = 4000
+        self.heath = 600
+        self.spawntime = 6000
         self.lifetime = 0
 
         self.frame = 0

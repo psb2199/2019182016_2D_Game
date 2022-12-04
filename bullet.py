@@ -68,7 +68,7 @@ class Bullet:
 
             if self.eff_swt == True:
                 self.imageEF.clip_composite_draw((int(self.effect_lifetime) % 13) * 30, 0, 30, 27, 0, '',
-                                                 self.effect_x, self.effect_y, 45, 45)
+                                                 self.effect_x, self.effect_y, 30, 27)
 
         #draw_rectangle(*self.get_bb())
 
@@ -86,6 +86,8 @@ class Bullet:
 
         if self.lifetime > 0:
             self.y += self.velocity
+            if self.y > 650:
+                self.y = -1000
 
         if self.lifetime > 200:
             self.y = self.y
@@ -144,8 +146,8 @@ class Bullet:
             self.y = 0
 
         elif group == 'bullets:mid_enemy':
-            self.effect_x = self.x
-            self.effect_y = self.y
+            self.effect_x = self.x + random.randint(-10,10)
+            self.effect_y = self.y + random.randint(-10,10)
             self.eff_swt = True
 
             self.x = 500
