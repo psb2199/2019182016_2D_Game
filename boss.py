@@ -51,7 +51,7 @@ class Boss:
                                            120 - self.die_img/ 10)
             self.imageEF.clip_composite_draw((int(self.frame / 10) % 13) * 30, 0, 30, 27, 0, '',
                                              self.effect_x, self.effect_y, 40, 40)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.hit == True:

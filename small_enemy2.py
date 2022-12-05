@@ -32,7 +32,7 @@ class Small_Enemy2:
     def draw(self):
         if self.heath > 0:
             self.image.clip_composite_draw(0*32, 0, 32, 36, 0, '', self.x, self.y, 48, 54)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.frame += 1
@@ -73,8 +73,6 @@ class Small_Enemy2:
     def handle_collision(self, other, group):
         if group == 'bullets:small_enemy2':
             self.heath -= self.damage
-        if group == 'player:small_enemy2':
-            print("gameover")
 
 
 

@@ -254,7 +254,6 @@ def update():
             a.handle_collision(b, group)
             b.handle_collision(a, group)
 
-    gametime += 1
 
 
 

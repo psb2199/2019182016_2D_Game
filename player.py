@@ -158,6 +158,11 @@ class Player:
         self.frame = 0
         self.dir_x = 0
         self.dir_y = 0
+
+        self.life = 3
+        self.collide_time = 0
+        self.collide = False
+
         self.image = load_image('resources\\Player.png')
 
         self.bullet_level = 1
@@ -179,11 +184,18 @@ class Player:
                 print(f'ERROR: State {self.cur_state.__name__}    Event {event_name[event]}')
             self.cur_state.enter(self, event)
 
+        if self.collide:
+            self.collide_time += 1
+            if self.collide_time > 700:
+                self.collide = False
+                self.collide_time = 0
+
+
 
 
     def draw(self):
         self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -196,7 +208,11 @@ class Player:
     def get_bb(self):
         size_weath = 7
         size_heigt = 7
-        return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
+
+        if self.collide:
+            return 0,0,0,0
+        else:
+            return self.x - size_weath, self.y - size_heigt, self.x + size_weath, self.y + size_heigt
 
 
     def handle_collision(self, other, group):
@@ -208,10 +224,22 @@ class Player:
 
                 self.attack_power = 5
         if group == 'player:boss_bullets':
-            print("gameover")
+            self.life -= 1
+            self.collide = True
         if group == 'player:mid_enemy_bullets':
-            print("gameover")
+            self.life -= 1
+            self.collide = True
+        if group == 'player:small_enemys':
+            self.life -= 1
+            self.collide = True
+        if group == 'player:small_enemy2':
+            self.life -= 1
+            self.collide = True
 
+        if self.life < 1:
+            print("gameover")
+        else:
+            print(self.life)
 
         pass
 

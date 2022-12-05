@@ -24,7 +24,7 @@ class Mid_Enemy_Bullet:
 
         if self.lifetime > 0:
             self.image.clip_composite_draw(0, 0, 14, 48, 0, 'v', self.x, self.y, 7, 24)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.lifetime += 1
