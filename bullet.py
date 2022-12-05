@@ -92,7 +92,7 @@ class Bullet:
         if self.lifetime > 200:
             self.y = self.y
             self.lifetime = 0
-            Bullet.fire_sound.play(1)
+            # Bullet.fire_sound.play(1)
 
 
 

@@ -15,7 +15,7 @@ class Mid_Enemy_Bullet:
         self.player_x, self.player_y = player_x,player_y
         self.lifetime = 0
         self.frame = 0
-        self.velocity = 3
+        self.velocity = 2
         self.degree = 0
 
 

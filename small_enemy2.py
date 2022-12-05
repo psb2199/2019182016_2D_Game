@@ -8,6 +8,7 @@ health = 10
 
 class Small_Enemy2:
     image = None
+    explo_sound = None
 
 
     def __init__(self,y=700,damage = 1):
@@ -24,6 +25,10 @@ class Small_Enemy2:
         self.x = random.randint(50,350)
 
         self.frame = 0
+
+        if Small_Enemy2.explo_sound is None:
+            Small_Enemy2.explo_sound = load_wav('resources\\sound\\explo.wav')
+            Small_Enemy2.explo_sound.set_volume(32)
 
 
 
@@ -42,6 +47,8 @@ class Small_Enemy2:
             self.died = False
             self.y = -1/100000*(self.liftime - 2900)*(self.liftime - 3000)*(self.liftime - 3100) + 400
         else:
+            Small_Enemy2.explo_sound.play()
+
             self.died = True
             self.die_x = self.x
             self.die_y = self.y

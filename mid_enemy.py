@@ -4,13 +4,15 @@ import game_world
 import random
 import math
 
-heath = 70
+heath = 50
 
 class Mid_Enemy:
     image = None
     image_hit = None
     image_die = None
     imageEF = None
+
+    explo_sound = None
 
     def __init__(self,y=700,x = 200,damage = 1):
         if Mid_Enemy.image == None:
@@ -21,6 +23,11 @@ class Mid_Enemy:
             Mid_Enemy.image_die = load_image('resources\\mid_enemy_destroied.png')
         if Mid_Enemy.imageEF == None:
             Mid_Enemy.imageEF = load_image('resources\\Effect.png')
+
+        if Mid_Enemy.explo_sound is None:
+            Mid_Enemy.explo_sound = load_wav('resources\\sound\\boss_explo.wav')
+            Mid_Enemy.explo_sound.set_volume(32)
+
         self.x, self.y, self.damage = x, y, damage
         self.heath = heath
 
@@ -31,6 +38,7 @@ class Mid_Enemy:
 
 
         self.die_img = 0
+        self.die_sound_flag = False
 
         self.start_y = 0
         self.hit = False
@@ -75,17 +83,21 @@ class Mid_Enemy:
                     self.y = 1/500*(self.frame - 2000)**2 + 350
 
             else :
-                #game_world.remove_collision_object(self)
                 self.y -= 0.2
                 self.die_img += 1
                 if self.die_img % 100 == 0:
                     self.effect_x = self.x + random.randint(-40,40)
                     self.effect_y = self.y + random.randint(-20, 20)
                 if self.die_img > 600:
-                    #game_world.remove_object(self)
                     self.die_img = 0
                     self.x = -100
                     self.y = -100
+
+                if self.die_sound_flag == False:
+                    Mid_Enemy.explo_sound.play()
+                    self.die_sound_flag = True
+
+
 
         if self.lifetime > 3000:
             self.x = 700
@@ -93,6 +105,8 @@ class Mid_Enemy:
             self.heath = heath
             self.frame = 0
             self.lifetime = 0
+            self.die_sound_flag = False
+
 
 
 

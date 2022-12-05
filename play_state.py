@@ -1,4 +1,7 @@
 from pico2d import *
+
+import gameover_state
+
 import game_framework
 import game_world
 
@@ -112,10 +115,10 @@ def enter():
     game_world.add_object(mid_enemy, 1)
 
     mid_em_bulcnt = 2
-    mid_em_bulgap = 20
+    mid_em_bulgap = 50
     mid_enemy_bullets = [Mid_Enemy_Bullet() for i in range(mid_em_bulcnt)]
     for i in range(mid_em_bulcnt):
-        mid_enemy_bullets[i].lifetime = -i * mid_em_bulgap - 100
+        mid_enemy_bullets[i].lifetime = -i * mid_em_bulgap - 200
         game_world.add_object(mid_enemy_bullets[i], 0)
 
 
@@ -170,21 +173,34 @@ def enter():
 
 # 종료
 def exit():
+    global ii, ee, ee2, ss, pp, mm
+    ii,ee,ee2,ss,pp,mm = 0,0,0,0,0,0
+    # for game_object in game_world.all_objects():
+    #     game_world.remove_object(game_object)
     game_world.clear()
 
 
 def update():
-    global ii,ee,ee2, ss,pp,mm, gametime
+    global ii,ee,ee2, ss,pp,mm
     for game_object in game_world.all_objects():
         game_object.update()
 
-    if bullets[ii].lifetime == 0:
-        bullets[ii].x = player.x
-        bullets[ii].y = player.y
-        bullets[ii].bullet_level = player.bullet_level
+    if player.collide:
+        bullets[ii].x = -100
+        bullets[ii].y = -100
         ii += 1
-    if ii + 1 > bullet_count:
-        ii = 0
+        if ii + 1 > bullet_count:
+            ii = 0
+        pass
+    else:
+        if bullets[ii].lifetime == 0:
+            bullets[ii].x = player.x
+            bullets[ii].y = player.y
+            bullets[ii].bullet_level = player.bullet_level
+            bullets[ii].fire_sound.play(1)
+            ii += 1
+        if ii + 1 > bullet_count:
+            ii = 0
 
 
     small_enemys[ss].damage = player.attack_power
@@ -248,13 +264,16 @@ def update():
     mid_enemy.damage = player.attack_power
 
 
+    if player.life < 1:
+        background.bgm.stop()
+        exit()
+        game_framework.change_state(gameover_state)
+
     for a,b, group in game_world.all_collision_pairs():
         if collide(a, b):
             # print('COLLID by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-
-
 
 
 

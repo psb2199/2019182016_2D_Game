@@ -165,8 +165,16 @@ class Player:
 
         self.image = load_image('resources\\Player.png')
 
+        self.die_effect = load_image('resources\\player_explo.png')
+        self.die_sound = load_wav('resources\\sound\\life_explo.wav')
+        self.die_sound.set_volume(32)
+        self.die_x = -100
+        self.die_y = -100
+
         self.bullet_level = 1
         self.attack_power = 1
+        self.powerup_sound = load_wav('resources\\sound\\powerup.wav')
+        self.powerup_sound.set_volume(32)
 
         self.event_que = []
         self.cur_state = IDLE
@@ -186,6 +194,10 @@ class Player:
 
         if self.collide:
             self.collide_time += 1
+            if self.collide_time < 200:
+                self.x = 200
+                self.y = -15000 / self.collide_time + 200
+
             if self.collide_time > 700:
                 self.collide = False
                 self.collide_time = 0
@@ -194,7 +206,15 @@ class Player:
 
 
     def draw(self):
-        self.cur_state.draw(self)
+        if self.collide:
+            self.die_effect.clip_composite_draw((min(int(self.collide_time),53) % 64) * 128, 0, 128, 128, 0, '',
+                                             self.die_x, self.die_y, 64, 64)
+            if self.collide_time % 20 > 10:
+                self.cur_state.draw(self)
+            else:
+                pass
+        else:
+            self.cur_state.draw(self)
         #draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
@@ -220,21 +240,40 @@ class Player:
         if group == 'player:powerups':
             self.bullet_level += 1
             self.attack_power += 1
+            self.powerup_sound.play()
             if(self.attack_power > 5):
-
                 self.attack_power = 5
+
         if group == 'player:boss_bullets':
             self.life -= 1
             self.collide = True
+            self.die_sound.play()
+            self.die_x = self.x
+            self.die_y = self.y
+
         if group == 'player:mid_enemy_bullets':
             self.life -= 1
             self.collide = True
+            self.die_sound.play()
+            self.die_x = self.x
+            self.die_y = self.y
+
+
         if group == 'player:small_enemys':
             self.life -= 1
             self.collide = True
+            self.die_sound.play()
+            self.die_x = self.x
+            self.die_y = self.y
+
         if group == 'player:small_enemy2':
             self.life -= 1
             self.collide = True
+            self.die_sound.play()
+            self.die_x = self.x
+            self.die_y = self.y
+
+
 
         if self.life < 1:
             print("gameover")
