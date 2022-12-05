@@ -5,6 +5,9 @@ import gameover_state
 import game_framework
 import game_world
 
+from score_ui import Score_Ui
+from life_ui import Life_Ui
+
 from background import Background
 from background import Background_cloud
 from background import Background_cloud2
@@ -22,6 +25,9 @@ from mid_enemy_bullet import Mid_Enemy_Bullet
 from boss import Boss
 from boss_bullet import Boss_Bullet
 
+
+life_ui = []
+score_ui = None
 
 background = None
 cloud = None
@@ -69,7 +75,10 @@ def handle_events():
 
 # 초기화
 def enter():
-    # global gametime
+
+    global life_ui,max_player_life
+    global score_ui
+
     global background, cloud, cloud2
 
     global player, powerups
@@ -153,6 +162,16 @@ def enter():
         game_world.add_object(bullets[i], 1)
 
 
+    max_player_life = player.life
+    life_ui = [Life_Ui() for i in range(max_player_life)]
+    for i in range(max_player_life):
+        life_ui[i].x = i * 25 + 15
+        game_world.add_object(life_ui[i], 1)
+
+
+    score_ui = Score_Ui()
+    game_world.add_object(score_ui, 1)
+
 
     game_world.add_collision_group(bullets, small_enemys, 'bullets:small_enemys')
     game_world.add_collision_group(bullets, small_enemy2, 'bullets:small_enemy2')
@@ -173,15 +192,17 @@ def enter():
 
 # 종료
 def exit():
-    global ii, ee, ee2, ss, pp, mm
-    ii,ee,ee2,ss,pp,mm = 0,0,0,0,0,0
-    # for game_object in game_world.all_objects():
-    #     game_world.remove_object(game_object)
+    global total_score
+    for i in range(player.life):
+        total_score += life_ui[i].score
+    print(total_score)
+
     game_world.clear()
 
 
 def update():
     global ii,ee,ee2, ss,pp,mm
+    global total_score
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -264,6 +285,32 @@ def update():
     mid_enemy.damage = player.attack_power
 
 
+
+
+
+    for i in range(player.life, max_player_life):
+        life_ui[i].x = -100
+
+
+
+
+    total_score = 0
+
+    for i in range(small_em_cnt1):
+        total_score += small_enemys[i].score
+
+    total_score += small_enemy2.score
+    total_score += mid_enemy.score
+    total_score += boss.score
+
+    for i in range(3):
+        total_score += powerups[i].score
+
+    score_ui.total_score = total_score
+
+
+
+
     if player.life < 1:
         background.bgm.stop()
         exit()
@@ -274,6 +321,8 @@ def update():
             # print('COLLID by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+
+
 
 
 

@@ -22,6 +22,8 @@ class Powerup:
         self.died_x = -100
         self.died_y = -100
 
+        self.score = 0
+
         if Powerup.image == None:
             Powerup.image = load_image('resources\\Item_Power.png')
         if Powerup.textimage == None:
@@ -71,6 +73,7 @@ class Powerup:
             self.died_y = self.y
             self.x = -100
             self.y = -100
+            self.score += 100
             self.died = True
 
 

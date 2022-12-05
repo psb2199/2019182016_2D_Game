@@ -1,4 +1,7 @@
 from pico2d import *
+
+import gameover_state
+
 import game_framework
 import game_world
 import math
@@ -11,6 +14,7 @@ class Boss:
     image_die = None
     imageEF = None
 
+    explo_sound = None
 
     def __init__(self,x = 200,y=-100,damage = 1):
         if Boss.image == None:
@@ -21,6 +25,12 @@ class Boss:
             Boss.image_die = load_image('resources\\mid_Boss_destroied.png')
         if Boss.imageEF == None:
             Boss.imageEF = load_image('resources\\Effect.png')
+
+        if Boss.explo_sound is None:
+            Boss.explo_sound = load_wav('resources\\sound\\boss_explo.wav')
+            Boss.explo_sound.set_volume(32)
+
+
         self.x, self.y, self.damage = x,y,damage
         self.heath = 600
         self.spawntime = 6000
@@ -35,6 +45,8 @@ class Boss:
 
         self.effect_x = 0
         self.effect_y = 0
+
+        self.score = 0
 
 
 
@@ -51,7 +63,7 @@ class Boss:
                                            120 - self.die_img/ 10)
             self.imageEF.clip_composite_draw((int(self.frame / 10) % 13) * 30, 0, 30, 27, 0, '',
                                              self.effect_x, self.effect_y, 40, 40)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         if self.hit == True:
@@ -75,9 +87,11 @@ class Boss:
                 if self.die_img % 100 == 0:
                     self.effect_x = self.x + random.randint(-40,40)
                     self.effect_y = self.y + random.randint(-20, 20)
+                    Boss.explo_sound.play()
                 if self.die_img > 600:
+                    self.score += 3000
                     game_world.remove_object(self)
-                    self.die_img = 0
+                    game_framework.change_state(gameover_state)
 
 
     def get_bb(self):

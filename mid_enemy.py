@@ -39,6 +39,7 @@ class Mid_Enemy:
 
         self.die_img = 0
         self.die_sound_flag = False
+        self.score = 0
 
         self.start_y = 0
         self.hit = False
@@ -95,6 +96,7 @@ class Mid_Enemy:
 
                 if self.die_sound_flag == False:
                     Mid_Enemy.explo_sound.play()
+                    self.score += 250
                     self.die_sound_flag = True
 
 

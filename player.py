@@ -245,30 +245,30 @@ class Player:
                 self.attack_power = 5
 
         if group == 'player:boss_bullets':
-            self.life -= 1
             self.collide = True
+            self.life -= 1
             self.die_sound.play()
             self.die_x = self.x
             self.die_y = self.y
 
         if group == 'player:mid_enemy_bullets':
-            self.life -= 1
             self.collide = True
+            self.life -= 1
             self.die_sound.play()
             self.die_x = self.x
             self.die_y = self.y
 
 
         if group == 'player:small_enemys':
-            self.life -= 1
             self.collide = True
+            self.life -= 1
             self.die_sound.play()
             self.die_x = self.x
             self.die_y = self.y
 
         if group == 'player:small_enemy2':
-            self.life -= 1
             self.collide = True
+            self.life -= 1
             self.die_sound.play()
             self.die_x = self.x
             self.die_y = self.y

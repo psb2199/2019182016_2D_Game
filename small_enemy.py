@@ -23,6 +23,8 @@ class Small_Enemy:
 
         self.frame = 0
 
+        self.score = 0
+
         if Small_Enemy.explo_sound is None:
             Small_Enemy.explo_sound = load_wav('resources\\sound\\explo.wav')
             Small_Enemy.explo_sound.set_volume(32)
@@ -33,7 +35,7 @@ class Small_Enemy:
         if self.heath > 0:
             self.image.clip_composite_draw((int(self.frame/10) % 11)*32, 0, 32, 36, 0
                                            , '', self.x, self.y, 32, 36)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def update(self):
         self.frame += 1
@@ -44,6 +46,8 @@ class Small_Enemy:
             self.x += self.dir_x
         else:
             Small_Enemy.explo_sound.play()
+            self.score += 10
+
             self.y = -100
             self.heath = health
 

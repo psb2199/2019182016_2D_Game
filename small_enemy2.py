@@ -26,6 +26,8 @@ class Small_Enemy2:
 
         self.frame = 0
 
+        self.score = 0
+
         if Small_Enemy2.explo_sound is None:
             Small_Enemy2.explo_sound = load_wav('resources\\sound\\explo.wav')
             Small_Enemy2.explo_sound.set_volume(32)
@@ -48,6 +50,8 @@ class Small_Enemy2:
             self.y = -1/100000*(self.liftime - 2900)*(self.liftime - 3000)*(self.liftime - 3100) + 400
         else:
             Small_Enemy2.explo_sound.play()
+            self.score += 50
+
 
             self.died = True
             self.die_x = self.x
