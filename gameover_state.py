@@ -1,17 +1,17 @@
 import game_framework
-import play_state
+
 from pico2d import *
 
-import title_state
-
+import play_state
 image = None
-logo_time = 0
+
 
 def enter():
     global image
+    global font
 
     image = load_image('resources\\gameover.png')
-
+    font = load_font('DS-DIGIT.TTF', 25)
 
 def exit():
     global image
@@ -32,17 +32,24 @@ def handle_events():
 
 
 def update():
-    # global logo_time
-    # if (logo_time > 6.0):
-    #     logo_time = 0
-    #     # game_framework.quit()
-    #     game_framework.change_state(title_state)
-    #     delay(0.01)
-    # logo_time += 0.01
+
     pass
 
 def draw():
     clear_canvas()
     #image.draw(200,300)
     image.clip_composite_draw(0, 0, 509, 535, 0, '', 200, 300, 400, 600)
+
+    font.draw(110, 230, '==== Score ====' % ( ), (200, 200, 200))
+    font.draw(170, 200, '%d' % (play_state.total_score), (200, 200, 200))
     update_canvas()
+
+def test_self():
+    import play_state
+
+    pico2d.open_canvas(400, 600)
+    game_framework.run(play_state)
+    pico2d.clear_canvas()
+
+if __name__ == '__main__':
+    test_self()

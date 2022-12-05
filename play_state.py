@@ -195,6 +195,10 @@ def exit():
     global total_score
     for i in range(player.life):
         total_score += life_ui[i].score
+
+    total_score += boss.score
+
+    score_ui.total_score = total_score
     print(total_score)
 
     game_world.clear()
@@ -301,7 +305,6 @@ def update():
 
     total_score += small_enemy2.score
     total_score += mid_enemy.score
-    total_score += boss.score
 
     for i in range(3):
         total_score += powerups[i].score

@@ -14,7 +14,7 @@ def enter():
     image = load_image('resources\\title.png')
     title = load_image('resources\\PRESSkey.png')
 
-    bgm = load_wav('resources\\sound\\start.wav')
+    bgm = load_music('resources\\sound\\start.mp3')
     bgm.set_volume(32)
     bgm.play()
 
